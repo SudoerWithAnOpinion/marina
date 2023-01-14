@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# if (type pnpm); then
+#   pnpx commitlint --verbose --edit ${1}
+# else
+#   npx commitlint --verbose --edit ${1}
+# fi
+
+node_modules/.bin/commitlint --verbose --edit ${1}
