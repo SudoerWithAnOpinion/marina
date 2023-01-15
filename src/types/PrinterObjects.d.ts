@@ -265,13 +265,8 @@ type PrinterObjectsNamePrefixes = {
     enabled: boolean,
   },
 };
-type StepperObjectsNamePrefixes = {
-  [K as string]: any
-}
 
-type VariedPrinterObjects = {
-  [K as string]: any
-};
 
-type PrinterObjects = StaticPrinterObjects & Partial<VariedPrinterObjects> & Partial<StepperObjectsNamePrefixes>;
+// WIP: This type works, but isn't very restrictive; it allows any string to be used as a key with any type
+type PrinterObjects = StaticPrinterObjects & { [k as string]: any };
 type PrinterObjectsNames = keyof PrinterObjects;
