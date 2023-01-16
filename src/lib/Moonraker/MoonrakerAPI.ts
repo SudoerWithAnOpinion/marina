@@ -1,6 +1,6 @@
 export default class MoonrakerAPI {
   public printerURL: string
-  public objectsAvailable?: Partial<PrinterObjectsNames>
+  public objectCache: Partial<PrinterObjects> & { objects: string[] } = { objects: [] };
 
   constructor(printerURL: string) {
     this.printerURL = printerURL
@@ -19,7 +19,7 @@ export default class MoonrakerAPI {
     }).then(response => {
       return response.json();
     }).then(json => {
-      this.objectsAvailable = json.result.objects;
+      this.objectCache = json.result.objects;
       return this;
     }).catch((err) => {
       throw new Error(err);
@@ -30,30 +30,25 @@ export default class MoonrakerAPI {
    * Get Available Printer Objects
    * Automatically fetches object list if not already fetched
    */
-  public async getAvailableObjects(): Promise<Partial<PrinterObjectsNames>> {
-    if (this.objectsAvailable === undefined) {
+  public async getAvailableObjects(): Promise<string[]> {
+    if (this.objectCache.objects.length === 0) {
       await this.fetchObjects();
     }
-    return this.objectsAvailable as Partial<PrinterObjectsNames>;
+    return this.objectCache.objects;
   }
 
   /**
    * Query Printer Object(s)
    * Automatically fetches objects list if not already fetched
    */
-  public async queryObjects(objects?: string[]): Promise<Record<string, unknown>> {
-    if (this.objectsAvailable === undefined) {
+  public async queryObjects(objects: string[]): Promise<Record<string, unknown>> {
+    if (this.objectCache.objects.length === 0) {
       await this.fetchObjects();
     }
-    // Determine objects to query, or all if none specified
-    if (objects === undefined) {
-      objects = Object.keys(this.objectsAvailable as PrinterObjectsNames);
-    } else {
-      // Remove any objects that are not available
-      objects = objects.filter((object) => {
-        return this.objectsAvailable?.includes(object);
-      });
-    }
+    // Remove any objects that are not available
+    objects = objects.filter((object) => {
+      return this.objectCache.objects?.includes(object);
+    });
 
     return fetch(`${this.printerURL}/printer/objects/query`, {
       method: 'POST',
@@ -66,9 +61,43 @@ export default class MoonrakerAPI {
     }).then(response => {
       return response.json();
     }).then(json => {
-      return json.result as Record<string, unknown>;
+      // Update object cache (new results take precedence)
+      this.objectCache = { ...this.objectCache, ...json.result.status };
+      return json.result.status as Record<string, unknown>;
     }).catch((err) => {
       throw new Error(err);
     });
+  }
+
+  /**
+   * Gets Printer Print Volume
+   * This is a constant value, so it is only queried automatically once.
+   */
+  public async getPrintVolume() {
+    // Query data if not available
+    const requiredObjects = ['stepper_x', 'stepper_y', 'stepper_z'];
+    const objsAvail = false// requiredObjects.every(item => this.objectCache.keys().includes(item));
+    if (!objsAvail) {
+      await this.queryObjects(requiredObjects);
+    }
+    // Return print volume
+    const printerDimensions = {
+      x: {
+        max: this.objectCache.configfile?.settings.stepper_x.position_max as number,
+        min: this.objectCache.configfile?.settings.stepper_x.position_min as number,
+      },
+      y: {
+        max: this.objectCache?.configfile?.settings.stepper_y.config?.position_max as number,
+        min: this.objectCache?.configfile?.settings.stepper_y.config?.position_min as number,
+      },
+      z: {
+        max: this.objectCache?.configfile?.settings.stepper_z.config?.position_max as number,
+        min: this.objectCache?.configfile?.settings.stepper_z.config?.position_min as number,
+      }
+    }
+    return {
+      ...printerDimensions,
+      volume: printerDimensions.x.max * printerDimensions.y.max * printerDimensions.z.max
+    }
   }
 }

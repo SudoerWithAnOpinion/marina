@@ -25,9 +25,9 @@ type StaticPrinterObjects = {
   /** The configfile object reports printer configuration state */
   configfile: {
     /** This is an object containing the configuration as read from printer.cfg. Each config section will be an object containing the configured options. Values will ALWAYS be reported as strings. Note that default values are not reported, only options configured in printer.cfg are present. */
-    config: object,
+    config: Record<string, any>,
     /** Similar to config, however this object includes default values that may not have been included in printer.cfg. It is possible for a value to be a string, integer, boolean, or float. */
-    settings: object,
+    settings: Record<string, any>,
     /** True if the printer has taken an action which has updated the internal configuration (ie: PID calibration, probe calibration, bed mesh calibration). This allows clients to present the user with the option to execute a SAVE_CONFIG gcode which will save the configuration to printer.cfg and restart the Klippy Host. */
     save_config_pending: boolean,
   },
