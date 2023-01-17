@@ -1,6 +1,6 @@
 export default class MoonrakerAPI {
   public printerURL: string
-  public objectCache: Partial<PrinterObjects> & { objects: string[] } = { objects: [] };
+  public objectCache: Partial<MoonrakerAPIResult.PrinterObjects> & { objects: string[] } = { objects: [] };
 
   constructor(printerURL: string) {
     this.printerURL = printerURL
@@ -77,23 +77,23 @@ export default class MoonrakerAPI {
     // Query data if not available
     const requiredObjects = ['stepper_x', 'stepper_y', 'stepper_z'];
     // Verify the required objects are available in the cache, otherwise, query them
-    const objsAvail = requiredObjects.every(item => { Object.keys(this.objectCache).includes(item) });
+    const objsAvail = requiredObjects.every(item => { return Object.keys(this.objectCache).includes(item) });
     if (!objsAvail) {
       await this.queryObjects(requiredObjects);
     }
     // Return print volume
     const printerDimensions = {
       x: {
-        max: this.objectCache.configfile?.settings.stepper_x.position_max as number,
-        min: this.objectCache.configfile?.settings.stepper_x.position_min as number,
+        max: this.objectCache.configfile?.settings.stepper_x?.position_max as number,
+        min: this.objectCache.configfile?.settings.stepper_x?.position_min as number,
       },
       y: {
-        max: this.objectCache?.configfile?.settings.stepper_y.config?.position_max as number,
-        min: this.objectCache?.configfile?.settings.stepper_y.config?.position_min as number,
+        max: this.objectCache?.configfile?.settings.stepper_y?.position_max as number,
+        min: this.objectCache?.configfile?.settings.stepper_y?.position_min as number,
       },
       z: {
-        max: this.objectCache?.configfile?.settings.stepper_z.config?.position_max as number,
-        min: this.objectCache?.configfile?.settings.stepper_z.config?.position_min as number,
+        max: this.objectCache?.configfile?.settings.stepper_z?.position_max as number,
+        min: this.objectCache?.configfile?.settings.stepper_z?.position_min as number,
       }
     }
     return {
