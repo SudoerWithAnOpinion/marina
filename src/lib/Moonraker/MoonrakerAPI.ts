@@ -76,7 +76,8 @@ export default class MoonrakerAPI {
   public async getPrintVolume() {
     // Query data if not available
     const requiredObjects = ['stepper_x', 'stepper_y', 'stepper_z'];
-    const objsAvail = false// requiredObjects.every(item => this.objectCache.keys().includes(item));
+    // Verify the required objects are available in the cache, otherwise, query them
+    const objsAvail = requiredObjects.every(item => { Object.keys(this.objectCache).includes(item) });
     if (!objsAvail) {
       await this.queryObjects(requiredObjects);
     }
