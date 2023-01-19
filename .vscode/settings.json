@@ -1,0 +1,9 @@
+{
+  "cSpell.words": [
+    "configfile"
+  ],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "sudoer-with-an-opinion",
+    "projectKey": "TheRevenantStar_marina"
+  }
+}
