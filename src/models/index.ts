@@ -5,6 +5,8 @@ import * as dbConfigFile from '../../sequelize.config.json';
 // import User, * as UserModelFile from './Users/User';
 import Job, * as JobModelFile from './Jobs/Job';
 import JobEvent, * as JobEventModelFile from './Jobs/JobEvent';
+import Printer, * as PrinterModelFile from './Printers/Printer';
+
 
 let dbConfig: Options;
 
@@ -33,14 +35,16 @@ const sequelize = new Sequelize({
 });
 // Setup Models
 const Models = [
-	// UserModelFile,
 	JobModelFile,
-	JobEventModelFile
+	JobEventModelFile,
+	PrinterModelFile
 ];
 Models.forEach((model) => model.init(sequelize));
 Models.forEach((model) => model.associate());
 
 export {
-	sequelize
-	// User,
+	sequelize,
+	Job,
+	JobEvent,
+	Printer
 };

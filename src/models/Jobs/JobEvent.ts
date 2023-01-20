@@ -1,31 +1,30 @@
-import Printer from '$models/Printer';
 import type {
 	Association,
 	CreationOptional,
 	ForeignKey,
-	HasManyAddAssociationMixin,
-	HasManyAddAssociationsMixin,
-	HasManyCountAssociationsMixin,
-	HasManyCreateAssociationMixin,
-	HasManyGetAssociationsMixin,
-	HasManyHasAssociationMixin,
-	HasManyHasAssociationsMixin,
-	HasManyRemoveAssociationMixin,
-	HasManyRemoveAssociationsMixin,
-	HasManySetAssociationsMixin,
 	InferAttributes,
 	InferCreationAttributes,
 	NonAttribute
 } from 'sequelize';
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
-import Job from './Job';
+import Printer from '$models/Printers/Printer';
+import Job from '$models/Jobs/Job';
 
-export default class JobEvent extends Model<InferAttributes<Job>, InferCreationAttributes<Job>> {
+export enum JobEventType {
+	SUBMITTED = 'SUBMITTED',
+	PRINTING = 'PRINTING',
+	PAUSED = 'PAUSED',
+	CANCELLED = 'CANCELLED',
+	ERROR = 'ERROR',
+	COMPLETED = 'COMPLETED'
+}
+
+export default class JobEvent extends Model<InferAttributes<JobEvent>, InferCreationAttributes<JobEvent>> {
 	/**
 	 * Unique event ID of the job
 	 */
-	declare eventId: CreationOptional<UUID>;
+	declare eventId: CreationOptional<string>;
 
 	/**
 	 * Refers to the Job's jobId this event belongs to
@@ -33,9 +32,12 @@ export default class JobEvent extends Model<InferAttributes<Job>, InferCreationA
 	declare jobId: ForeignKey<Job['jobId']>;
 
 	/**
-	 * Refers to the Printer's pritnerId this event belongs to
+	 * Refers to the Printer's pritnerId this event belongs to.
+	 * This is optional as not all events are related to a printer.
 	 */
-	declare printerId?: ForeignKey<Printer['printerId']>;
+	declare printerId?: ForeignKey<Printer['printerId']> | null;
+
+	declare eventType: JobEventType;
 
 	// Associations
 	/**
@@ -54,7 +56,50 @@ export default class JobEvent extends Model<InferAttributes<Job>, InferCreationA
 }
 
 export function init(sequelize: Sequelize) {
-	JobEvent.init(/* TODO: Init JobEvent */);
+	JobEvent.init({
+		eventId: {
+			type: DataTypes.UUID,
+			primaryKey: true,
+			defaultValue: DataTypes.UUIDV4
+		},
+		jobId: {
+			type: DataTypes.UUID,
+			allowNull: false,
+			references: {
+				model: 'Job',
+				key: 'jobId'
+			}
+		},
+		printerId: {
+			type: DataTypes.UUID,
+			allowNull: true,
+			references: {
+				model: 'Printer',
+				key: 'printerId'
+			}
+		},
+		eventType: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		createdAt: {
+			type: DataTypes.DATE,
+			allowNull: false,
+			defaultValue: DataTypes.NOW
+		},
+		updatedAt: {
+			type: DataTypes.DATE,
+			allowNull: false,
+			defaultValue: DataTypes.NOW
+		}
+	}, {
+		sequelize,
+		tableName: 'job_events',
+		modelName: 'JobEvent',
+		timestamps: true,
+		createdAt: 'createdAt',
+		updatedAt: 'updatedAt'
+	});
 }
 export function associate() {
 	JobEvent.belongsTo(Job, {
@@ -63,6 +108,9 @@ export function associate() {
 		as: 'job'
 	});
 	JobEvent.hasOne(Printer, {
-		as: 'printer'
+		foreignKey: 'printerId',
+		sourceKey: 'printerId',
+		as: 'printer',
+		constraints: false
 	});
 }

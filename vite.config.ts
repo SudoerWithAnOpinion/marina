@@ -14,6 +14,7 @@ const config: UserConfig = {
 	test: {
 		environment: 'jsdom',
 		include: ['tests/{unit,integration}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+		setupFiles: ['./tests/unit/setup.ts'],
 		coverage: {
 			provider: 'istanbul',
 			reporter: ['text', 'html', 'lcov'],
