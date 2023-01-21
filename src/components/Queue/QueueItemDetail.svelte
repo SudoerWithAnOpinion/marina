@@ -1,5 +1,6 @@
 <script lang='ts'>
-import { Button, Card, Timeline, TimelineItem, ImagePlaceholder } from 'flowbite-svelte';
+import { Button, Card } from 'flowbite-svelte';
+import JobTimeline from './Timeline/JobTimeline.svelte';
 import type { Job } from '$models';
 export let job: Job;
 
@@ -16,20 +17,6 @@ export let job: Job;
   </Card>
 </div>
   <Card>
-		<Timeline order="vertical">
-      {#if job.events === undefined || job.events === null || job.events.length === 0}
-        <TimelineItem title="No Events">
-					No Events
-				</TimelineItem>
-      {:else}
-        {#each job.events as event}
-          <TimelineItem title={event.eventType} date={event.createdAt.toISOString()}>
-            {#if event.printer !== undefined}
-              <p>Handling Printer: {(event.printer).name}</p>
-            {/if}
-          </TimelineItem>
-        {/each}
-      {/if}
-    </Timeline>
+    <JobTimeline jobEvents={job.events} />
 	</Card>
 </div>  

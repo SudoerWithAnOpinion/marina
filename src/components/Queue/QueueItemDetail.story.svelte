@@ -1,4 +1,6 @@
-<script lang="ts">
+
+<script lang='ts'>
+	import {DateTime} from 'luxon';
 	import type { Hst } from '@histoire/plugin-svelte';
 	import QueueItemDetail from './QueueItemDetail.svelte';
 	export let Hst: Hst;
@@ -20,10 +22,10 @@
 		submitted: {
 			eventId: '11111111-1111-1111-0000-111111111112',
 			jobId: '11111111-1111-1111-9999-111111111111',
-			printerId: printers.printing.printerId,
+			printerId: printers.idle.printerId,
 			printer: printers.idle,
 			eventType: 'SUBMITTED',
-			createdAt: new Date()
+			createdAt: DateTime.now().plus({hours: -12}).toJSDate()
 		} as JobEvent,
 		printing: {
 			eventId: '11111111-1111-1111-0000-111111111113',
@@ -31,7 +33,15 @@
 			printerId: printers.printing.printerId,
 			printer: printers.printing,
 			eventType: 'PRINTING',
-			createdAt: new Date()
+			createdAt: DateTime.now().plus({hours: -10}).toJSDate()
+		} as JobEvent,
+		error: {
+			eventId: '11111111-1111-1111-0000-111111111114',
+			jobId: '11111111-1111-1111-9999-111111111111',
+			printerId: printers.printing.printerId,
+			printer: printers.printing,
+			eventType: 'ERROR',
+			createdAt: DateTime.now().plus({hours: -1}).toJSDate()
 		} as JobEvent
 	}
 	const jobs = {
@@ -54,15 +64,27 @@
 				jobEvents.printing
 			]
 		} as unknown as Job,
+		error: {
+			jobId: '11111111-1111-1111-9999-111111111111',
+			jobName: 'printing.gcode',
+			createdAt: DateTime.now().plus({hours: -1}).toJSDate(),
+			updatedAt: DateTime.now().plus({hours: -1}).toJSDate(),
+			events: [
+				jobEvents.submitted,
+				jobEvents.printing,
+				jobEvents.error
+		]
+		} as unknown as Job
 	}
 	let selectedJob: (keyof typeof jobs) = 'printing';
 </script>
 
-<Hst.Story title="Queue Item Detail" icon="carbon:tasksettings">
+<Hst.Story title="Queue Item Detail" icon="carbon:task-settings">
 	<svelte:fragment slot="controls">
 		<Hst.Select title='Job State' bind:value={selectedJob} options={{
 			idle: 'Idle',
-			printing: 'Printing'
+			printing: 'Printing',
+			error: 'Error'
 		}}
 		/>
 

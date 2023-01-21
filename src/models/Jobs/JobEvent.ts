@@ -1,5 +1,6 @@
 import type {
 	Association,
+	Attributes,
 	CreationOptional,
 	ForeignKey,
 	InferAttributes,
@@ -11,14 +12,7 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 import Printer from '$models/Printers/Printer';
 import Job from '$models/Jobs/Job';
 
-export enum JobEventType {
-	SUBMITTED = 'SUBMITTED',
-	PRINTING = 'PRINTING',
-	PAUSED = 'PAUSED',
-	CANCELLED = 'CANCELLED',
-	ERROR = 'ERROR',
-	COMPLETED = 'COMPLETED'
-}
+export type JobEventType = 'SUBMITTED' | 'PRINTING' | 'PAUSED' | 'CANCELLED' | 'ERROR' | 'PRINT_DONE' | 'COMPLETED';
 
 export default class JobEvent extends Model<InferAttributes<JobEvent>, InferCreationAttributes<JobEvent>> {
 	/**
@@ -54,6 +48,7 @@ export default class JobEvent extends Model<InferAttributes<JobEvent>, InferCrea
 	declare createdAt: Date;
 	declare updatedAt: Date;
 }
+export type JobEventAttributes = Attributes<JobEvent>;
 
 export function init(sequelize: Sequelize) {
 	JobEvent.init({
