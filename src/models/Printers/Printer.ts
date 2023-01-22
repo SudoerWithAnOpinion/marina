@@ -41,7 +41,7 @@ export default class Printer extends Model<
 	declare volume: string;
 
 	// Associations
-	declare jobs: NonAttribute<Job[]>;
+	declare jobs?: NonAttribute<Job[]>;
 	declare static associations: {
 		jobs: Association<Printer, Job>;
 	};
@@ -50,52 +50,52 @@ export default class Printer extends Model<
 	declare createdAt: Date;
 	declare updatedAt: Date;
 
-}
+	public static initialize(sequelize: Sequelize) {
+		return this.init({
+			printerId: {
+				type: DataTypes.UUID,
+				primaryKey: true,
+				defaultValue: DataTypes.UUIDV4
+			},
+			name: {
+				type: DataTypes.STRING,
+				allowNull: false
+			},
+			description: {
+				type: DataTypes.STRING,
+				allowNull: false
+			},
+			address: {
+				type: DataTypes.STRING,
+				allowNull: false
+			},
+			volume: {
+				type: DataTypes.JSON,
+				allowNull: false
+			},
+			createdAt: {
+				type: DataTypes.DATE,
+				allowNull: false,
+				defaultValue: DataTypes.NOW
+			},
+			updatedAt: {
+				type: DataTypes.DATE,
+				allowNull: false,
+				defaultValue: DataTypes.NOW
+			}
+		}, {
+			sequelize,
+			tableName: 'printers',
+			modelName: 'Printer',
+			createdAt: 'createdAt',
+			updatedAt: 'updatedAt'
+		});
+	}
 
-export function init(sequelize: Sequelize) {
-	Printer.init({
-		printerId: {
-			type: DataTypes.UUID,
-			primaryKey: true,
-			defaultValue: DataTypes.UUIDV4
-		},
-		name: {
-			type: DataTypes.STRING,
-			allowNull: false
-		},
-		description: {
-			type: DataTypes.STRING,
-			allowNull: false
-		},
-		address: {
-			type: DataTypes.STRING,
-			allowNull: false
-		},
-		volume: {
-			type: DataTypes.JSON,
-			allowNull: false
-		},
-		createdAt: {
-			type: DataTypes.DATE,
-			allowNull: false,
-			defaultValue: DataTypes.NOW
-		},
-		updatedAt: {
-			type: DataTypes.DATE,
-			allowNull: false,
-			defaultValue: DataTypes.NOW
-		}
-	}, {
-		sequelize,
-		tableName: 'printers',
-		modelName: 'Printer',
-		createdAt: 'createdAt',
-		updatedAt: 'updatedAt'
-	})
-}
-export function associate() {
-	Printer.hasMany(Job, {
-		foreignKey: 'printerId',
-		as: 'jobs'
-	});
+	public static associate(): void {
+		this.hasMany(Job, {
+			foreignKey: 'printerId',
+			as: 'jobs'
+		});
+	}
 }

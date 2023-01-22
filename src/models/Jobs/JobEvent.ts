@@ -47,65 +47,66 @@ export default class JobEvent extends Model<InferAttributes<JobEvent>, InferCrea
 	// Timestamps
 	declare createdAt: Date;
 	declare updatedAt: Date;
+
+	public static initialize(sequelize: Sequelize) {
+		return this.init({
+			eventId: {
+				type: DataTypes.UUID,
+				primaryKey: true,
+				defaultValue: DataTypes.UUIDV4
+			},
+			jobId: {
+				type: DataTypes.UUID,
+				allowNull: false,
+				references: {
+					model: 'Job',
+					key: 'jobId'
+				}
+			},
+			printerId: {
+				type: DataTypes.UUID,
+				allowNull: true,
+				references: {
+					model: 'Printer',
+					key: 'printerId'
+				}
+			},
+			eventType: {
+				type: DataTypes.STRING,
+				allowNull: false
+			},
+			createdAt: {
+				type: DataTypes.DATE,
+				allowNull: false,
+				defaultValue: DataTypes.NOW
+			},
+			updatedAt: {
+				type: DataTypes.DATE,
+				allowNull: false,
+				defaultValue: DataTypes.NOW
+			}
+		}, {
+			sequelize,
+			tableName: 'job_events',
+			modelName: 'JobEvent',
+			timestamps: true,
+			createdAt: 'createdAt',
+			updatedAt: 'updatedAt'
+		});
+	}
+
+	public static associate(): void {
+		JobEvent.belongsTo(Job, {
+			foreignKey: 'jobId',
+			targetKey: 'jobId',
+			as: 'job'
+		});
+		JobEvent.hasOne(Printer, {
+			foreignKey: 'printerId',
+			sourceKey: 'printerId',
+			as: 'printer',
+			constraints: false
+		});
+	}
 }
 export type JobEventAttributes = Attributes<JobEvent>;
-
-export function init(sequelize: Sequelize) {
-	JobEvent.init({
-		eventId: {
-			type: DataTypes.UUID,
-			primaryKey: true,
-			defaultValue: DataTypes.UUIDV4
-		},
-		jobId: {
-			type: DataTypes.UUID,
-			allowNull: false,
-			references: {
-				model: 'Job',
-				key: 'jobId'
-			}
-		},
-		printerId: {
-			type: DataTypes.UUID,
-			allowNull: true,
-			references: {
-				model: 'Printer',
-				key: 'printerId'
-			}
-		},
-		eventType: {
-			type: DataTypes.STRING,
-			allowNull: false
-		},
-		createdAt: {
-			type: DataTypes.DATE,
-			allowNull: false,
-			defaultValue: DataTypes.NOW
-		},
-		updatedAt: {
-			type: DataTypes.DATE,
-			allowNull: false,
-			defaultValue: DataTypes.NOW
-		}
-	}, {
-		sequelize,
-		tableName: 'job_events',
-		modelName: 'JobEvent',
-		timestamps: true,
-		createdAt: 'createdAt',
-		updatedAt: 'updatedAt'
-	});
-}
-export function associate() {
-	JobEvent.belongsTo(Job, {
-		foreignKey: 'jobId',
-		targetKey: 'jobId',
-		as: 'job'
-	});
-	JobEvent.hasOne(Printer, {
-		foreignKey: 'printerId',
-		sourceKey: 'printerId',
-		as: 'printer',
-		constraints: false
-	});
-}
