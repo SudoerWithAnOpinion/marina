@@ -42,7 +42,31 @@
 			printer: printers.printing,
 			eventType: 'ERROR',
 			createdAt: DateTime.now().plus({hours: -1}).toJSDate()
-		} as JobEvent
+		} as JobEvent,
+		cancelled: {
+			eventId: '11111111-1111-1111-0000-111111111115',
+			jobId: '11111111-1111-1111-9999-111111111111',
+			printerId: printers.printing.printerId,
+			printer: printers.printing,
+			eventType: 'CANCELLED',
+			createdAt: DateTime.now().plus({hours: -1}).toJSDate()
+		} as JobEvent,
+		paused: {
+			eventId: '11111111-1111-1111-0000-111111111116',
+			jobId: '11111111-1111-1111-9999-111111111111',
+			printerId: printers.printing.printerId,
+			printer: printers.printing,
+			eventType: 'PAUSED',
+			createdAt: DateTime.now().plus({hours: -4}).toJSDate()
+		} as JobEvent,
+		resumed: {
+			eventId: '11111111-1111-1111-0000-111111111117',
+			jobId: '11111111-1111-1111-9999-111111111111',
+			printerId: printers.printing.printerId,
+			printer: printers.printing,
+			eventType: 'RESUMED',
+			createdAt: DateTime.now().plus({hours: -5}).toJSDate()
+		} as JobEvent,
 	}
 	const jobs = {
 		idle: {
@@ -53,7 +77,7 @@
 			events: [
 				jobEvents.submitted
 			]
-		} as unknown as Job,
+		} as Job,
 		printing: {
 			jobId: '11111111-1111-1111-9999-111111111111',
 			jobName: 'printing.gcode',
@@ -63,7 +87,7 @@
 				jobEvents.submitted,
 				jobEvents.printing
 			]
-		} as unknown as Job,
+		} as Job,
 		error: {
 			jobId: '11111111-1111-1111-9999-111111111111',
 			jobName: 'printing.gcode',
@@ -73,8 +97,20 @@
 				jobEvents.submitted,
 				jobEvents.printing,
 				jobEvents.error
-		]
-		} as unknown as Job
+			],
+		} as Job,
+		cancelled: {
+			jobId: '11111111-1111-1111-9999-111111111111',
+			jobName: 'printing.gcode',
+			createdAt: DateTime.now().plus({hours: -1}).toJSDate(),
+			updatedAt: DateTime.now().plus({hours: -1}).toJSDate(),
+			events: [
+				jobEvents.submitted,
+				jobEvents.printing,
+				jobEvents.paused,
+				jobEvents.cancelled
+			],
+		} as Job,
 	}
 	let selectedJob: (keyof typeof jobs) = 'printing';
 </script>
@@ -84,10 +120,10 @@
 		<Hst.Select title='Job State' bind:value={selectedJob} options={{
 			idle: 'Idle',
 			printing: 'Printing',
-			error: 'Error'
+			error: 'Error',
+			cancelled: 'Cancelled'
 		}}
 		/>
-
   </svelte:fragment>
 	<QueueItemDetail job={jobs[selectedJob]}/>
 	

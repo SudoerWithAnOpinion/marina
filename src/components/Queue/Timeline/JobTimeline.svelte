@@ -19,8 +19,6 @@
    * The ID of the latest event in the jobEvents array.
    */
   const latestEventId = jobEvents[jobEvents.length - 1].eventId;
-
-
 </script>
 
 <Timeline order={order}>

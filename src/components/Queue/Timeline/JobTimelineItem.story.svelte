@@ -77,8 +77,8 @@
 			createdAt: DateTime.now().plus({hours: -1}).toJSDate(),
 			updatedAt: DateTime.now().plus({hours: -1}).toJSDate(),
 		} as JobEvent,
-		COMPLETED: {
-			eventType: 'COMPLETED',
+		PRINT_DONE: {
+			eventType: 'PRINT_DONE',
 			eventId: '11111111-1111-1111-1111-111111111111',
 			printerId: '11111111-1111-1111-1111-111111111111',
 			jobId: '11111111-1111-1111-1111-111111111111',
@@ -89,6 +89,32 @@
 			},
 			createdAt: DateTime.now().plus({hours: -1}).toJSDate(),
 			updatedAt: DateTime.now().plus({hours: -1}).toJSDate(),
+		} as JobEvent,
+		FAILED: {
+			eventType: 'FAILED',
+			eventId: '11111111-1111-1111-1111-111111111111',
+			printerId: '11111111-1111-1111-1111-111111111111',
+			jobId: '11111111-1111-1111-1111-111111111111',
+			printer: {
+				name: 'Printer 1',
+				createdAt: DateTime.now().toJSDate(),
+				updatedAt: DateTime.now().toJSDate(),
+			},
+			createdAt: DateTime.now().toJSDate(),
+			updatedAt: DateTime.now().toJSDate(),
+		} as JobEvent,
+		COMPLETED: {
+			eventType: 'COMPLETED',
+			eventId: '11111111-1111-1111-1111-111111111111',
+			printerId: '11111111-1111-1111-1111-111111111111',
+			jobId: '11111111-1111-1111-1111-111111111111',
+			printer: {
+				name: 'Printer 1',
+				createdAt: DateTime.now().toJSDate(),
+				updatedAt: DateTime.now().toJSDate(),
+			},
+			createdAt: DateTime.now().toJSDate(),
+			updatedAt: DateTime.now().toJSDate(),
 		} as JobEvent,
 	} as Record<string, JobEvent>;
 
@@ -103,6 +129,9 @@
 			COMPLETED: 'Completed',
 			CANCELLED: 'Cancelled',
 			PAUSED: 'Paused',
+			RESUMED: 'Resumed',
+			PRINT_DONE: 'Print Done',
+			FAILED: 'Failed',
 		}}
 		/>
 

@@ -12,7 +12,7 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 import Printer from '$models/Printers/Printer';
 import Job from '$models/Jobs/Job';
 
-export type JobEventType = 'SUBMITTED' | 'PRINTING' | 'PAUSED' | 'CANCELLED' | 'ERROR' | 'PRINT_DONE' | 'COMPLETED';
+export type JobEventType = 'SUBMITTED' | 'PRINTING' | 'PAUSED' | 'RESUMED' | 'CANCELLED' | 'ERROR' | 'PRINT_DONE' | 'COMPLETED' | 'FAILED';
 
 export default class JobEvent extends Model<InferAttributes<JobEvent>, InferCreationAttributes<JobEvent>> {
 	/**

@@ -12,6 +12,9 @@ const config = {
 		serviceWorker: {
 			register: false
 		},
+		paths: {
+			base: process.env.PUBLIC_BASE_PATH || '',
+		},
 		alias: {
 			$models: './src/models',
 			$components: './src/components',
