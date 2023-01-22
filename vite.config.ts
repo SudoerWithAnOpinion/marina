@@ -16,7 +16,8 @@ const config: UserConfig = {
 		include: ['tests/{unit,integration}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 		setupFiles: ['./tests/unit/setup.ts'],
 		coverage: {
-			provider: 'istanbul',
+			enabled: true,
+			provider: 'c8',
 			reporter: ['text', 'html', 'lcov'],
 		},
 	},

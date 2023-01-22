@@ -1,7 +1,10 @@
 <script lang='ts'>
   import _ from 'lodash';
   import { Button, Card, Timeline, TimelineItem, ImagePlaceholder } from 'flowbite-svelte';
-  import {CloudUpload, PlayFilledAlt, PauseFilled, StopFilledAlt, Misuse, ErrorFilled, ConditionPoint, UndefinedFilled } from 'carbon-icons-svelte';
+  import {
+    CloudUpload, PlayFilledAlt, PauseFilled, Misuse, ErrorFilled, 
+    ConditionPoint, UndefinedFilled, Checkmark, ContinueFilled 
+  } from 'carbon-icons-svelte';
 	import type { JobEventType } from '$models/Jobs/JobEvent';
 	import type Printer from '$models/Printers/Printer';
 
@@ -14,7 +17,7 @@
     createdAt: Date,
     printer?: Printer
   }; 
-  export const isLatest: boolean = false;
+  export let isLatest: boolean = false;
 
 </script>
 
@@ -40,15 +43,15 @@
       </span>
     {:else if jobEvent.eventType === 'PRINT_DONE'}
       <span class='
-        flex absolute -left-3 justify-center items-center w-6 h-6 bg-blue-500
-        rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-blue-500'>
+        flex absolute -left-3 justify-center items-center w-6 h-6 bg-blue-300
+        rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-blue-800'>
       <ConditionPoint />
       </span>
     {:else if jobEvent.eventType === 'COMPLETED'}
       <span class='
         flex absolute -left-3 justify-center items-center w-6 h-6 bg-green-900
-        rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-green-900'>
-        <UndefinedFilled />
+        rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-green-800'>
+        <Checkmark />
       </span>
     {:else if jobEvent.eventType === 'FAILED'}
       <span class='
@@ -62,6 +65,8 @@
         <CloudUpload/>
       {:else if jobEvent.eventType === 'PAUSED'}
         <PauseFilled />
+      {:else if jobEvent.eventType === 'RESUMED'}
+        <ContinueFilled />
       {/if}
     </span>
     {/if}

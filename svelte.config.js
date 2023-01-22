@@ -19,7 +19,7 @@ const config = {
 			$models: './src/models',
 			$components: './src/components',
 			$services: './src/services',
-			$tests: './src/tests',
+			$tests: './tests',
 		},
 		env: {
 			publicPrefix: 'PUBLIC_'
