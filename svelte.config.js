@@ -12,6 +12,9 @@ const config = {
 		serviceWorker: {
 			register: false
 		},
+		paths: {
+			base: '/proxy/5173',
+		},
 		alias: {
 			$models: './src/models',
 			$components: './src/components',

@@ -1,0 +1,13 @@
+diff --git a/src/runtime/server/page/render.js b/src/runtime/server/page/render.js
+index 9c911ebb147b51d8414cee769794c007ae988961..95b2f159378b2cbad83f52a00669ed617a743d3e 100644
+--- a/src/runtime/server/page/render.js
++++ b/src/runtime/server/page/render.js
+@@ -164,7 +164,7 @@ export async function render_response({
+ 	}
+ 
+ 	/** @param {string} path */
+-	const prefixed = (path) => (path.startsWith('/') ? path : `${resolved_assets}/${path}`);
++	const prefixed = (path) => (path.startsWith('/') ? base + path : `${resolved_assets}/${path}`);
+ 
+ 	const serialized = { data: '', form: 'null', error: 'null' };
+ 
