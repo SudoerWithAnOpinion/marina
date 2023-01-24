@@ -7,6 +7,7 @@ const config: UserConfig = {
 	plugins: [sveltekit()],
 	server: {
 		host: true,
+		strictPort: true,
 		watch: {
 			ignored: ['**/coverage/**'],
 		},
