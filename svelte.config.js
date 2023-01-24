@@ -13,13 +13,13 @@ const config = {
 			register: false
 		},
 		paths: {
-			base: '/proxy/5173',
+			base: process.env.PUBLIC_BASE_PATH || '',
 		},
 		alias: {
 			$models: './src/models',
 			$components: './src/components',
 			$services: './src/services',
-			$tests: './src/tests',
+			$tests: './tests',
 		},
 		env: {
 			publicPrefix: 'PUBLIC_'

@@ -1,10 +1,11 @@
 import { env } from '$env/dynamic/private';
-import type { Options } from 'sequelize';
+import type { InferAttributes, InferCreationAttributes, Model, Options } from 'sequelize';
 import { Sequelize } from 'sequelize';
 import * as dbConfigFile from '../../sequelize.config.json';
-// import User, * as UserModelFile from './Users/User';
-import Job, * as JobModelFile from './Jobs/Job';
-import JobEvent, * as JobEventModelFile from './Jobs/JobEvent';
+import Job from './Jobs/Job';
+import JobEvent from './Jobs/JobEvent';
+import Printer from './Printers/Printer';
+
 
 let dbConfig: Options;
 
@@ -32,15 +33,22 @@ const sequelize = new Sequelize({
 	...dbConfig
 });
 // Setup Models
-const Models = [
-	// UserModelFile,
-	JobModelFile,
-	JobEventModelFile
-];
-Models.forEach((model) => model.init(sequelize));
-Models.forEach((model) => model.associate());
+const Models: Record<string, typeof Model<InferAttributes<Model>, InferCreationAttributes<Model>> & { associate?: () => void }> = {
+	Printer: Printer.initialize(sequelize),
+	JobEvent: JobEvent.initialize(sequelize),
+	Job: Job.initialize(sequelize),
+};
+// Setup Associations, if the model has an associate function
+Object
+	.values(Models)
+	.filter((model) => {
+		return model.associate !== undefined;
+	})
+	.forEach((model) => model.associate);
 
 export {
-	sequelize
-	// User,
+	sequelize,
+	Printer,
+	JobEvent,
+	Job,
 };

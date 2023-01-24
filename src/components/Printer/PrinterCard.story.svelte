@@ -9,7 +9,7 @@
 </script>
 
 <Hst.Story
-  title='Printers'
+  title='Printer Card'
   icon='carbon:printer'
   layout={{type:'grid', width: '100%'}}
 >

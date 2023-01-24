@@ -2,5 +2,7 @@
   "sonarlint.connectedMode.project": {
     "connectionId": "SudoerWithAnOpinion",
     "projectKey": "TheRevenantStar_marina"
-  }
+  },
+  "vitest.commandLine": "./node_modules/.bin/vitest",
+  "testing.automaticallyOpenPeekView": "never"
 }
