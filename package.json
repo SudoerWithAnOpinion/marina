@@ -60,6 +60,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-node": "^1.1.4",
 		"lodash": "^4.17.21",
 		"luxon": "^3.2.1",
 		"pg": "^8.8.0",
