@@ -61,11 +61,14 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltejs/adapter-node": "^1.1.4",
+		"@trpc/client": "^10.9.0",
+		"@trpc/server": "^10.9.0",
 		"lodash": "^4.17.21",
 		"luxon": "^3.2.1",
 		"pg": "^8.8.0",
 		"pg-hstore": "^2.3.4",
 		"sequelize": "^6.28.0",
-		"sqlite3": "^5.1.4"
+		"sqlite3": "^5.1.4",
+		"trpc-sveltekit": "^3.2.5"
 	}
 }

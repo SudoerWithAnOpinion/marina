@@ -11,6 +11,8 @@ specifiers:
   '@sveltejs/kit': ^1.2.2
   '@testing-library/jest-dom': ^5.16.5
   '@testing-library/svelte': ^3.2.2
+  '@trpc/client': ^10.9.0
+  '@trpc/server': ^10.9.0
   '@types/lodash': ^4.14.191
   '@types/luxon': ^3.2.0
   '@types/node': ^18.11.18
@@ -41,6 +43,7 @@ specifiers:
   svelte: ^3.55.1
   svelte-check: ^2.10.3
   tailwindcss: ^3.2.4
+  trpc-sveltekit: ^3.2.5
   tslib: ^2.4.1
   typescript: ^4.9.4
   vite: ^4.0.4
@@ -48,12 +51,15 @@ specifiers:
 
 dependencies:
   '@sveltejs/adapter-node': 1.1.4_@sveltejs+kit@1.2.2
+  '@trpc/client': 10.9.0_@trpc+server@10.9.0
+  '@trpc/server': 10.9.0
   lodash: 4.17.21
   luxon: 3.2.1
   pg: 8.8.0
   pg-hstore: 2.3.4
   sequelize: 6.28.0_m3ugypen3uqqn632xrjjqfxynq
   sqlite3: 5.1.4
+  trpc-sveltekit: 3.2.5
 
 devDependencies:
   '@commitlint/cli': 17.4.2
@@ -998,6 +1004,18 @@ packages:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
     dev: true
+
+  /@trpc/client/10.9.0_@trpc+server@10.9.0:
+    resolution: {integrity: sha512-id6318qpgqllNOuBp7nuciXFPXCe+zae5d4r1hze6Eyp5fFFNO58TqA+4Q44KIcHgpfWyW2egs6iPeql3PrdKA==}
+    peerDependencies:
+      '@trpc/server': 10.9.0
+    dependencies:
+      '@trpc/server': 10.9.0
+    dev: false
+
+  /@trpc/server/10.9.0:
+    resolution: {integrity: sha512-5psyZgbvy29pJND32hwkWTMbv6s86IbsPOeDopsgNF0VegZT6Dsijmb7Ub/TDhuJVQVq5u4u5briMXi3SxmBkw==}
+    dev: false
 
   /@tsconfig/node10/1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -5958,6 +5976,13 @@ packages:
     resolution: {integrity: sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==}
     engines: {node: '>=8'}
     dev: true
+
+  /trpc-sveltekit/3.2.5:
+    resolution: {integrity: sha512-b73LSquF0QurtPt7p/sb/4wSzzNaw82aiF1yXLKi1dmpbtoWxeQ3LcmHvJ5q2ohFfBqt7P8cUoyF99J3GTOLug==}
+    dependencies:
+      '@trpc/client': 10.9.0_@trpc+server@10.9.0
+      '@trpc/server': 10.9.0
+    dev: false
 
   /ts-node/10.9.1_awa2wsr5thmg3i7jqycphctjfq:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
