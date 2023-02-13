@@ -25,6 +25,7 @@ specifiers:
   eslint: ^8.32.0
   eslint-config-prettier: ^8.6.0
   eslint-plugin-svelte3: ^4.0.0
+  eslint-plugin-testing-library: ^5.10.1
   flowbite-svelte: ^0.29.11
   histoire: ^0.12.4
   husky: ^8.0.3
@@ -83,6 +84,7 @@ devDependencies:
   eslint: 8.32.0
   eslint-config-prettier: 8.6.0_eslint@8.32.0
   eslint-plugin-svelte3: 4.0.0_tmo5zkisvhu6htudosk5k7m6pu
+  eslint-plugin-testing-library: 5.10.1_7uibuqfxkfaozanbtbziikiqje
   flowbite-svelte: 0.29.11
   histoire: 0.12.4_dwc45emffwupjr7rjuagt6pgri
   husky: 8.0.3
@@ -2538,6 +2540,19 @@ packages:
     dependencies:
       eslint: 8.32.0
       svelte: 3.55.1
+    dev: true
+
+  /eslint-plugin-testing-library/5.10.1_7uibuqfxkfaozanbtbziikiqje:
+    resolution: {integrity: sha512-GRy87AqUi2Ij69pe0YnOXm3oGBCgnFwfIv+Hu9q/kT3jL0pX1cXA7aO+oJnvdpbJy2+riOPqGsa3iAkL888NLg==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0, npm: '>=6'}
+    peerDependencies:
+      eslint: ^7.5.0 || ^8.0.0
+    dependencies:
+      '@typescript-eslint/utils': 5.48.2_7uibuqfxkfaozanbtbziikiqje
+      eslint: 8.32.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: true
 
   /eslint-scope/5.1.1:

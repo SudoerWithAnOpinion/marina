@@ -9,3 +9,6 @@ The most recent, or lack of any items, is how the state is derived.
   - **Event: PRINT_DONE**: This indicates the printer has completed the print, but the print has not been removed from the printer.
   - **Event: COMPLETED**: This indicates the printed object was removed and the job marked complete. No further actions may be taken on this job (though the user may optionally re-submit it as a new job with the same parameters)
   - **Event: ERROR**: This job has an error, usually caused by the printing process. User intervention is needed to clear the error. Additionally, the system may re-queue the job on another capable printer.
+  - **Event: PAUSED**: This job is paused and awaits the user to resume it.
+  - **Event: FAILED**: This job has been marked as failed.
+  - **Event: CANCELED**: This job has been canceled and will not be printed.

@@ -104,7 +104,7 @@ export const jobs: Job[] = [
       jobEvents[0],
       jobEvents[1],
       jobEvents[2],
-      jobEvents[5],
+      jobEvents[4],
     ]
   } as Job,
   {
