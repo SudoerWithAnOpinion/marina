@@ -36,6 +36,11 @@ export default class Printer extends Model<
 	declare address: string;
 
 	/**
+	 * The API key for the printer's Moonraker API
+	 */
+	declare apiKey: string;
+
+	/**
 	 * Print Volume
 	 */
 	declare volume: string;
@@ -68,6 +73,10 @@ export default class Printer extends Model<
 			address: {
 				type: DataTypes.STRING,
 				allowNull: false
+			},
+			apiKey: {
+				type: DataTypes.STRING,
+				allowNull: true
 			},
 			volume: {
 				type: DataTypes.JSON,

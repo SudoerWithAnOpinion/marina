@@ -20,6 +20,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      apiKey: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       volume: {
         type: Sequelize.JSON,
         allowNull: true,
