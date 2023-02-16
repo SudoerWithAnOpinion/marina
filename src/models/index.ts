@@ -5,7 +5,8 @@ import * as dbConfigFile from '../../sequelize.config.json';
 import Job from './Jobs/Job';
 import JobEvent from './Jobs/JobEvent';
 import Printer from './Printers/Printer';
-
+import Material from './Materials/Material';
+import MaterialUsage from './Materials/MaterialUsage';
 
 let dbConfig: Options;
 
@@ -37,6 +38,8 @@ const Models: Record<string, typeof Model<InferAttributes<Model>, InferCreationA
 	Printer: Printer.initialize(sequelize),
 	JobEvent: JobEvent.initialize(sequelize),
 	Job: Job.initialize(sequelize),
+	Material: Material.initialize(sequelize),
+	MaterialUsage: MaterialUsage.initialize(sequelize),
 };
 // Setup Associations, if the model has an associate function
 Object
@@ -51,4 +54,6 @@ export {
 	Printer,
 	JobEvent,
 	Job,
+	Material,
+	MaterialUsage,
 };

@@ -1,6 +1,7 @@
 import type Printer from '$models/Printers/Printer';
 import type Job from '$models/Jobs/Job';
 import type JobEvent from '$models/Jobs/JobEvent';
+import type Material from '$models/Materials/Material'
 
 
 export const printers: Printer[] = [
@@ -134,4 +135,18 @@ export const jobs: Job[] = [
       jobEvents[7],
     ]
   } as Job
+];
+
+export const materials: Material[] = [
+  {
+    materialId: '8c2e7969-5f72-41cf-8527-36a6891bc761',
+    vendor: 'FauxFilaments Inc',
+    materialType: 'PLA',
+    materialDiameter: 1.75,
+    initialWeight: 1200,
+    materialWeight: 1000,
+    color: '000000',
+    createdAt: new Date('2023-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2023-01-01T00:00:00.000Z'),
+  } as Material
 ];
