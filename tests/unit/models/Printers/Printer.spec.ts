@@ -1,6 +1,7 @@
 import { assert, describe, expect, it, afterEach, expectTypeOf, vi } from 'vitest';
 
 vi.mock('sequelize');
+import { Sequelize } from 'sequelize';
 import Printer from '$models/Printers/Printer';
 
 describe('Printer', () => {
@@ -14,6 +15,11 @@ describe('Printer', () => {
     expectTypeOf(Printer).toHaveProperty('associate').toBeFunction();
     expectTypeOf(Printer).toHaveProperty('associations').toHaveProperty('jobs')
   });
+  it('should have static methods', () => {
+    expectTypeOf(Printer).toHaveProperty('initialize').toBeFunction();
+    expectTypeOf(Printer).toHaveProperty('associate').toBeFunction();
+  });
+
   it('should have instance properties', () => {
     const printer = new Printer();
     expectTypeOf(printer).toHaveProperty('printerId').toBeString();
@@ -23,4 +29,8 @@ describe('Printer', () => {
     expectTypeOf(printer).toHaveProperty('volume').toBeString();
   });
 
+  it('should initialize', () => {
+    const sequelize = new Sequelize();
+    Printer.initialize(sequelize);
+  });
 });

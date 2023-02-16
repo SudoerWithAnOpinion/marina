@@ -18,11 +18,7 @@ export default class Job extends Model<InferAttributes<Job>, InferCreationAttrib
 	declare nozzleDiameter?: number;
 	declare layerHeight?: number;
 
-	// Associations
-	declare events?: NonAttribute<JobEvent[]>;
-	declare static associations: {
-		events: Association<Job, JobEvent>;
-	};
+
 
 	// Timestamps
 	declare createdAt: Date;
@@ -61,10 +57,18 @@ export default class Job extends Model<InferAttributes<Job>, InferCreationAttrib
 		});
 	}
 
+	// Associations
+	declare events?: NonAttribute<JobEvent[]>;
+	declare static associations: {
+		events: Association<Job, JobEvent>;
+	};
+
 	public static associate(): void {
 		Job.hasMany(JobEvent, {
 			foreignKey: 'jobId',
 			sourceKey: 'jobId',
+			onDelete: 'RESTRICT',
+			onUpdate: 'CASCADE',
 			as: 'events'
 		});
 	}
