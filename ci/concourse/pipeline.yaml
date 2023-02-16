@@ -1,0 +1,231 @@
+---
+meta:
+  gh-status_handlers: &gh-status-handlers
+    on_success:
+      put: gh-status
+      inputs: [source]
+      params: { state: success }
+    on_failure:
+      put: gh-status
+      inputs: [source]
+      params: { state: failure }
+    on_error:
+      put: gh-status
+      inputs: [source]
+      params: { state: error }
+    on_abort:
+      put: gh-status
+      inputs: [source]
+      params: { state: error }
+
+resource_types:
+  - name: cogito
+    type: registry-image
+    check_every: 24h
+    source:
+      repository: pix4d/cogito
+  - name: pull-request
+    type: docker-image
+    source:
+      repository: teliaoss/github-pr-resource
+
+resources:
+  - name: source
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:SudoerWithAnOpinion/marina.git
+      private_key: ((github-key))
+      branch: dev
+  - name: gh-status
+    type: cogito
+    icon: checkbox-multiple-marked-circle
+    check_every: 1h
+    source:
+      owner: SudoerWithAnOpinion
+      repo: marina
+      access_token: ((github-pat-key))
+  - name: pull-request
+    type: pull-request
+    check_every: 24h
+    webhook_token: ((webhook-token))
+    source:
+      repository: SudoerWithAnOpinion/marina
+      access_token: ((github-pat-key))
+      states: ['OPEN']
+
+# We will repeat the install process so these steps operate independently, this is relevant to pull requests and merges idempotentcy.
+jobs:
+  - name: build
+    <<: *gh-status-handlers
+    plan:
+      - get: source
+        trigger: true
+      - put: gh-status
+        inputs: [source]
+        params: { state: pending }
+      # - get: node-image
+      #   trigger: false
+      - task: build
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: node
+              tag: 18-alpine3.15
+          inputs:
+            - name: source
+          caches:
+            - path: source/node_modules
+            - path: /root/.pnpm-store
+          outputs:
+            - name: source
+          params:
+            NODE_ENV: 'development'
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                echo "Node Version: $(node --version)"
+                apk add --no-cache --no-progress curl
+                npm install -g pnpm
+                echo "PNPM Version: $(/usr/local/bin/pnpm --version)"
+                echo "Node Where: $(which node)"
+                /usr/local/bin/pnpm config set store-dir /root/.pnpm-store
+                echo "PNPM Cache: $(/usr/local/bin/pnpm store path)"
+                cd source
+                /usr/local/bin/pnpm install --frozen-lockfile
+                /usr/local/bin/pnpm build
+
+  - name: code_tests
+    <<: *gh-status-handlers
+    plan:
+      - get: source
+        trigger: false
+      - put: gh-status
+        inputs: [source]
+        params: { state: pending }
+      # - get: node-image
+      #   trigger: false
+      - in_parallel:
+          - task: run_tests
+            config:
+              platform: linux
+              image_resource:
+                type: registry-image
+                source:
+                  repository: node
+                  tag: 18-alpine3.15
+              inputs:
+                - name: source
+              caches:
+                - path: source/node_modules
+                - path: /root/.pnpm-store
+              params:
+                NODE_ENV: 'development'
+              run:
+                path: /bin/sh
+                args:
+                  - -c
+                  - |
+                    echo "Node Version: $(node --version)"
+                    apk add --no-cache --no-progress curl
+                    npm install -g pnpm
+                    echo "PNPM Version: $(pnpm --version)"
+                    pnpm config set store-dir /root/.pnpm-store
+                    echo "PNPM Cache: $(pnpm store path)"
+                    cd source
+                    pnpm install
+                    pnpm run test:unit
+
+  - name: audit
+    <<: *gh-status-handlers
+    plan:
+      - get: source
+        trigger: false
+      - put: gh-status
+        inputs: [source]
+        params: { state: pending }
+      # - get: node-image
+      #   trigger: false
+      - in_parallel:
+          - task: run_tests
+            config:
+              platform: linux
+              image_resource:
+                type: registry-image
+                source:
+                  repository: node
+                  tag: 18-alpine3.15
+              inputs:
+                - name: source
+              caches:
+                - path: source/node_modules
+                - path: /root/.pnpm-store
+              # params:
+              run:
+                path: /bin/sh
+                args:
+                  - -c
+                  - |
+                    echo "Node Version: $(node --version)"
+                    apk add --no-cache --no-progress curl
+                    npm install -g pnpm
+                    echo "PNPM Version: $(pnpm --version)"
+                    pnpm config set store-dir /root/.pnpm-store
+                    echo "PNPM Cache: $(pnpm store path)"
+                    cd source
+                    pnpm install
+                    pnpm audit
+
+  # Pull Request Testing
+  - name: pull-request
+    on_failure:
+      put: pull-request
+      params:
+        path: pull-request
+        status: 'failure'
+    on_success:
+      put: pull-request
+      params:
+        path: pull-request
+        status: success
+    plan:
+      - get: pull-request
+        trigger: true
+        version: every
+      - put: pull-request
+        params:
+          path: pull-request
+          status: pending
+      - task: test-pr
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: node
+              tag: 18-alpine3.15
+          inputs:
+            - name: pull-request
+          caches:
+            - path: pull-request/node_modules
+            - path: /root/.pnpm-store
+          params:
+            FONTAWESOME_NPM_AUTH_TOKEN: ((FONTAWESOME_NPM_AUTH_TOKEN))
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                echo "Node Version: $(node --version)"
+                apk add --no-cache --no-progress curl
+                npm install -g pnpm
+                echo "PNPM Version: $(pnpm --version)"
+                /usr/local/bin/pnpm config set store-dir /root/.pnpm-store
+                echo "PNPM Cache: $(pnpm store path)"
+                cd pull-request
+                /usr/local/bin/pnpm install
+                /usr/local/bin/pnpm run test
