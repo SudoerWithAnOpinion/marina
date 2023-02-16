@@ -138,7 +138,7 @@ jobs:
                     echo "PNPM Cache: $(pnpm store path)"
                     cd source
                     pnpm install
-                    pnpm run test:unit
+                    pnpm run ci:test
 
   - name: audit
     <<: *gh-status-handlers

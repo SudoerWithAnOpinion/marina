@@ -17,7 +17,9 @@
 		"story:preview": "histoire preview",
 		"prepare": "husky install",
 		"lint-staged": "lint-staged",
-		"commit": "commit"
+		"commit": "commit",
+		"pipeline:set": "fly -t revenance set-pipeline --team marina --pipeline marina --config ./ci/concourse/pipeline.yaml  --load-vars-from ./ci/concourse/variables.private.yaml",
+		"ci:test": "svelte-kit sync && vitest run"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.4.3",
