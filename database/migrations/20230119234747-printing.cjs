@@ -7,6 +7,7 @@ module.exports = {
       printerId: {
         type: Sequelize.UUID,
         allowNull: false,
+        primaryKey: true,
       },
       name: {
         type: Sequelize.STRING,
@@ -42,14 +43,6 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false,
           primaryKey: true,
-        },
-        printerId: {
-          type: Sequelize.UUID,
-          allowNull: false,
-          references: {
-            model: 'printers',
-            key: 'printerId',
-          },
         },
         jobName: {
           type: Sequelize.STRING,
