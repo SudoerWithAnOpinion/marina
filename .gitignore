@@ -11,3 +11,4 @@ vite.config.ts.timestamp-*
 db.development.sqlite
 coverage/
 ci/**/*.private.yaml
+database/seeders/**/*.private.*

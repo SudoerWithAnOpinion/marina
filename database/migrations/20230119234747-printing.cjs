@@ -74,43 +74,43 @@ module.exports = {
         allowNull: false,
       },
       });
-      }).then(() => {
-        return queryInterface.createTable('job_events', {
-          eventId: {
-            type: Sequelize.UUID,
-            allowNull: false,
-            primaryKey: true,
+    }).then(() => {
+      return queryInterface.createTable('job_events', {
+        eventId: {
+          type: Sequelize.UUID,
+          allowNull: false,
+          primaryKey: true,
+        },
+        jobId: {
+          type: Sequelize.UUID,
+          allowNull: false,
+          references: {
+            model: 'jobs',
+            key: 'jobId',
           },
-          jobId: {
-            type: Sequelize.UUID,
-            allowNull: false,
-            references: {
-              model: 'jobs',
-              key: 'jobId',
-            },
+        },
+        printerId: {
+          type: Sequelize.UUID,
+          allowNull: false,
+          references: {
+            model: 'printers',
+            key: 'printerId',
           },
-          printerId: {
-            type: Sequelize.UUID,
-            allowNull: false,
-            references: {
-              model: 'printers',
-              key: 'printerId',
-            },
-          },
-          eventType: {
-            type: Sequelize.STRING,
-            allowNull: false,
-          },
-          createdAt: {
-            type: Sequelize.DATE,
-            allowNull: false,
-          },
-          updatedAt: {
-            type: Sequelize.DATE,
-            allowNull: false,
-          },
-        });
+        },
+        eventType: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          allowNull: false,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          allowNull: false,
+        },
       });
+    });
   },
 
   async down (queryInterface, Sequelize) {

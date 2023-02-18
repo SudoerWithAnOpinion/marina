@@ -104,6 +104,7 @@ export default class Printer extends Model<
 	public static associate(): void {
 		this.hasMany(Job, {
 			foreignKey: 'printerId',
+			sourceKey: 'printerId',
 			as: 'jobs'
 		});
 	}

@@ -16,6 +16,6 @@
   <NavHamburger on:click={toggle} />
   <NavUl {hidden}>
     <!-- <NavLi href="/" active={true}>Home</NavLi> -->
-    
+    <NavLi href="/printers">Printers</NavLi>
   </NavUl>
 </Navbar>

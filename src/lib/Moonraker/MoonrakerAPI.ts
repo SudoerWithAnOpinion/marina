@@ -1,3 +1,21 @@
+export interface MoonrakerAPIResponse<T> {
+  result: T;
+}
+
+export interface UpdateRepositoryStatus {
+  branch: string,
+  owner: string,
+  channel: string,
+  current_hash: string,
+  detached: boolean,
+  full_version_string: string;
+  is_dirty: boolean,
+  remote_hash: string,
+  remote_version: string,
+  repo_name: string,
+  version: string,
+}
+
 export default class MoonrakerAPI {
   public printerURL: string
   public objectCache: Partial<MoonrakerAPIResult.PrinterObjects> & { objects: string[] } = { objects: [] };
