@@ -19,7 +19,10 @@
 		"lint-staged": "lint-staged",
 		"commit": "commit",
 		"pipeline:set": "fly -t revenance set-pipeline --team marina --pipeline marina --config ./ci/concourse/pipeline.yaml  --load-vars-from ./ci/concourse/variables.private.yaml",
-		"ci:test": "svelte-kit sync && vitest run"
+		"ci:test": "svelte-kit sync && vitest run",
+		"platform:setup": "waypoint install -platform=docker -accept-tos; waypoint init",
+		"waypoint:up": "waypoint up",
+		"waypoint:down": "waypoint destroy --auto-approve"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.4.3",
