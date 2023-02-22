@@ -76,6 +76,9 @@
 		"pnpm": "^7.27.0",
 		"sequelize": "^6.28.0",
 		"sqlite3": "^5.1.4",
-		"trpc-sveltekit": "^3.3.0"
+		"trpc-sveltekit": "^3.3.0",
+		"youch": "^3.2.3",
+		"youch-terminal": "^2.2.0",
+		"zod": "^3.20.6"
 	}
 }
