@@ -1,4 +1,4 @@
-import type { MoonrakerAPIResponse, UpdateRepositoryStatus } from '$lib/Moonraker/MoonrakerAPI';
+import type { MoonrakerAPIResponse, UpdateRepositoryStatus } from '$lib/RemotePrinter/Moonraker/MoonrakerAPI';
 
 interface MachineUpdateStatusResponse {
   version_info: {
