@@ -26,6 +26,8 @@ describe('Printer', () => {
     expectTypeOf(printer).toHaveProperty('name').toBeString();
     expectTypeOf(printer).toHaveProperty('description').toBeString();
     expectTypeOf(printer).toHaveProperty('address').toBeString();
+    expectTypeOf(printer).toHaveProperty('connectionType').toBeString();
+    expectTypeOf(printer).toHaveProperty('connectionType').toBeNullable();
     expectTypeOf(printer).toHaveProperty('volume').toBeString();
   });
 

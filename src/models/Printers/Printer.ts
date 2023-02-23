@@ -33,7 +33,13 @@ export default class Printer extends Model<
 	/**
 	 * The IP address or hostname, & port of the printer's Moonraker API
 	 */
-	declare address: string;
+	declare address: string | null;
+
+	/**
+	 * Connection type
+	 * moonraker, octoprint, or none (default)
+	 */
+	declare connectionType: CreationOptional<string>;
 
 	/**
 	 * The API key for the printer's Moonraker API
@@ -72,7 +78,12 @@ export default class Printer extends Model<
 			},
 			address: {
 				type: DataTypes.STRING,
-				allowNull: false
+				allowNull: true
+			},
+			connectionType: {
+				type: DataTypes.STRING,
+        allowNull: false,
+				defaultValue: 'none'
 			},
 			apiKey: {
 				type: DataTypes.STRING,
