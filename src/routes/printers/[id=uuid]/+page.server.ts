@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { Printer } from '$models';
-import { getUpdateStatus } from '$lib/Moonraker/UpdateManager';
+import { getUpdateStatus } from '$lib/RemotePrinter/Moonraker/UpdateManager';
 
 export const load: PageServerLoad = async ({ params }) => {
   try {
