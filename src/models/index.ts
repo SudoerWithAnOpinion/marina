@@ -7,6 +7,9 @@ import JobEvent from './Jobs/JobEvent';
 import Printer from './Printers/Printer';
 import Material from './Materials/Material';
 import MaterialUsage from './Materials/MaterialUsage';
+import User from './Users/User';
+import Key from './Users/Key';
+import Session from './Users/Session';
 
 let dbConfig: Options;
 
@@ -56,4 +59,7 @@ export {
 	Job,
 	Material,
 	MaterialUsage,
+	User,
+	Key,
+	Session
 };
