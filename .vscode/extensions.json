@@ -3,9 +3,10 @@
 		"bradlc.vscode-tailwindcss",
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
-		"Gruntfuggly.todo-tree",
+		"gruntfuggly.todo-tree",
 		"lightyen.tailwindcss-intellisense-twin",
 		"svelte.svelte-vscode",
-		"ZixuanChen.vitest-explorer"
+		"zixuanchen.vitest-explorer",
+		"usernamehw.errorlens"
 	]
 }

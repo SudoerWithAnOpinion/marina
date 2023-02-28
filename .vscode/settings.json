@@ -4,5 +4,8 @@
     "projectKey": "TheRevenantStar_marina"
   },
   "vitest.commandLine": "./node_modules/.bin/vitest",
-  "testing.automaticallyOpenPeekView": "never"
+  "testing.automaticallyOpenPeekView": "never",
+  "workbench.tree.indent": 16,
+  "explorer.sortOrder": "filesFirst",
+  "explorer.compactFolders": false
 }
