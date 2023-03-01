@@ -14,52 +14,54 @@ import Session from './Users/Session';
 let dbConfig: Options;
 
 if (env.NODE_ENV === 'production' && env.SEQUELIZE_PROD_CONFIG === undefined) {
-	//Forces Dev DB if the production config is not set
-	dbConfig = dbConfigFile['development'] as Options;
+  //Forces Dev DB if the production config is not set
+  dbConfig = dbConfigFile['development'] as Options;
 } else {
-	switch (env.NODE_ENV) {
-		case 'production':
-			dbConfig = env.SEQUELIZE_PROD_CONFIG as Options; // TODO! This is likely not working
-			break;
-		case 'test':
-			dbConfig = dbConfigFile['test'] as Options;
-			break;
-		case 'development':
-		default:
-			dbConfig = dbConfigFile['development'] as Options;
-			dbConfig.logging = process.env.SEQUELIZE_VERBOSE == 'true' ? console.log : false;
-			break;
-	}
+  switch (env.NODE_ENV) {
+    case 'production':
+      dbConfig = env.SEQUELIZE_PROD_CONFIG as Options; // TODO! This is likely not working
+      break;
+    case 'test':
+      dbConfig = dbConfigFile['test'] as Options;
+      break;
+    case 'development':
+    default:
+      dbConfig = dbConfigFile['development'] as Options;
+      dbConfig.logging = process.env.SEQUELIZE_VERBOSE == 'true' ? console.log : false;
+      break;
+  }
 }
 
 // Get Sequelize Instance
 const sequelize = new Sequelize({
-	...dbConfig
+  ...dbConfig
 });
 // Setup Models
-const Models: Record<string, typeof Model<InferAttributes<Model>, InferCreationAttributes<Model>> & { associate?: () => void }> = {
-	Printer: Printer.initialize(sequelize),
-	JobEvent: JobEvent.initialize(sequelize),
-	Job: Job.initialize(sequelize),
-	Material: Material.initialize(sequelize),
-	MaterialUsage: MaterialUsage.initialize(sequelize),
+const Models: Record<
+  string,
+  typeof Model<InferAttributes<Model>, InferCreationAttributes<Model>> & {
+    associate?: () => void;
+    loadScopes?: () => void;
+  }
+> = {
+  Printer: Printer.initialize(sequelize),
+  JobEvent: JobEvent.initialize(sequelize),
+  Job: Job.initialize(sequelize),
+  Material: Material.initialize(sequelize),
+  MaterialUsage: MaterialUsage.initialize(sequelize)
 };
 // Setup Associations, if the model has an associate function
-Object
-	.values(Models)
-	.filter((model) => {
-		return model.associate !== undefined;
-	})
-	.forEach((model) => model.associate);
+Object.values(Models)
+  .filter((model) => {
+    return model.associate !== undefined;
+  })
+  .forEach((model) => model.associate);
 
-export {
-	sequelize,
-	Printer,
-	JobEvent,
-	Job,
-	Material,
-	MaterialUsage,
-	User,
-	Key,
-	Session
-};
+// Setup Scopes, if the model has a loadScopes function
+Object.values(Models)
+  .filter((model) => {
+    return model.associate !== undefined;
+  })
+  .forEach((model) => model.loadScopes);
+
+export { sequelize, Printer, JobEvent, Job, Material, MaterialUsage, User, Key, Session };

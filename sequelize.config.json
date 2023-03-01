@@ -1,17 +1,17 @@
 {
-	"development": {
-		"dialect": "sqlite",
-		"storage": "./db.development.sqlite",
-		"seederStorage": "sequelize",
-		"pool": {
-			"max": 2,
-			"min": 0,
-			"acquire": 30000,
-			"idle": 10000
-		}
-	},
-	"test": {
-		"dialect": "sqlite",
-		"storage": ":memory:"
-	}
+  "development": {
+    "dialect": "sqlite",
+    "storage": "./db.development.sqlite",
+    "seederStorage": "sequelize",
+    "pool": {
+      "max": 2,
+      "min": 0,
+      "acquire": 30000,
+      "idle": 10000
+    }
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": ":memory:"
+  }
 }

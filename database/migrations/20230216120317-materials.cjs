@@ -2,63 +2,63 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     return queryInterface.createTable('materials', {
       materialId: {
         type: Sequelize.UUID,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.UUIDV4
       },
       vendor: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       materialType: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       materialDiameter: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       initialWeight: {
         type: Sequelize.FLOAT,
-        allowNull: false,
+        allowNull: false
       },
       materialWeight: {
         type: Sequelize.FLOAT,
-        allowNull: false,
+        allowNull: false
       },
       color: {
         type: Sequelize.STRING(6),
-        allowNull: false,
+        allowNull: false
       },
       openedAt: {
         type: Sequelize.DATE,
-        allowNull: true,
+        allowNull: true
       },
       depletedAt: {
         type: Sequelize.DATE,
-        allowNull: true,
+        allowNull: true
       },
       lastRenewalAt: {
         type: Sequelize.DATE,
-        allowNull: true,
+        allowNull: true
       },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.NOW
       },
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
-      },
+        defaultValue: Sequelize.NOW
+      }
     });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     return queryInterface.dropTable('materials');
   }
 };
