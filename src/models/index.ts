@@ -1,6 +1,6 @@
 import { env } from '$env/dynamic/private';
 import type { InferAttributes, InferCreationAttributes, Model, Options } from 'sequelize';
-import { Sequelize } from 'sequelize';
+import { Sequelize, Op } from 'sequelize';
 import * as dbConfigFile from '../../sequelize.config.json';
 import Job from './Jobs/Job';
 import JobEvent from './Jobs/JobEvent';
@@ -44,6 +44,9 @@ const Models: Record<
     loadScopes?: () => void;
   }
 > = {
+  User: User.initialize(sequelize),
+  Key: Key.initialize(sequelize),
+  Session: Session.initialize(sequelize),
   Printer: Printer.initialize(sequelize),
   JobEvent: JobEvent.initialize(sequelize),
   Job: Job.initialize(sequelize),
@@ -64,4 +67,4 @@ Object.values(Models)
   })
   .forEach((model) => model.loadScopes);
 
-export { sequelize, Printer, JobEvent, Job, Material, MaterialUsage, User, Key, Session };
+export { sequelize, Op, Printer, JobEvent, Job, Material, MaterialUsage, User, Key, Session };

@@ -2,10 +2,15 @@
   import { page } from '$app/stores';
   import { handleSession } from "@lucia-auth/sveltekit/client";
   import '../app.css';
-  import Navbar from '$components/Navbar/Navbar.svelte';
-  
+  import {Content, Theme} from 'carbon-components-svelte'
+  import Header from '$components/Header/Header.svelte';
   handleSession(page);
-</script>
 
-<Navbar />
-<slot />
+  let theme = "g90"
+
+</script>
+<Theme bind:theme />
+<Header />
+<Content>
+  <slot />
+</Content>
