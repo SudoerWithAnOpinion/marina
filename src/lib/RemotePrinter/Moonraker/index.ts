@@ -1,12 +1,22 @@
 /**
  * Moonraker Class file
- * 
+ *
  * This file holds abstractions for printers to access and control Moonraker.
  */
-import type RemotePrinter from '../RemotePrinter';
+
+import type RemotePrinter from '$lib/RemotePrinter/RemotePrinter';
+import { type UpdateCheckResult } from '$lib/RemotePrinter/RemotePrinter';
+import {
+  type APIResult,
+  type MachineUpdateStatusAPIResponse,
+  type UpdateRepositoryStatus,
+  isUpdateRepositoryStatus,
+  isSystemUpdateStatus
+} from './RemoteAPI';
+
 import WS from 'ws';
 
-export default class MoonrakerConnection implements RemotePrinter {
+export default class MoonrakerRemotePrinter implements RemotePrinter {
   public connectionType: 'moonraker' | 'octoprint' | 'none' = 'moonraker';
   /**
    * Connection Address
@@ -24,7 +34,7 @@ export default class MoonrakerConnection implements RemotePrinter {
   protected socket: WS | null = null;
 
   /**
-   * 
+   *
    * @param address {string} The URL to connect to the Moonraker instance
    * @param apiKey {string} The API key to connect to the Moonraker instance
    * @see MoonrakerConnection.connectionAddress
@@ -34,7 +44,7 @@ export default class MoonrakerConnection implements RemotePrinter {
     if (apiKey !== undefined) this.connectionAPIKey = apiKey;
   }
 
-  protected buildConnectionURL(websocket = false):string{
+  protected buildConnectionURL(websocket = false): string {
     let url = this.connectionAddress;
     // If WebSocket, chage the http(s) to ws(s)
     if (websocket) {
@@ -66,26 +76,72 @@ export default class MoonrakerConnection implements RemotePrinter {
     return false;
   }
   /**
-   * Emergency Stop 
+   * Emergency Stop
    * Turns off heaters, de-energizes motors, and stops the printer.
    * Fans will jump to 100% if configured in Klipper.
    */
   public emergencyStop(): void {
-      fetch(`${this.buildConnectionURL()}/printer/emergency_stop`, {method: 'POST'});
+    fetch(`${this.buildConnectionURL()}/printer/emergency_stop`, { method: 'POST' });
   }
   /**
    * Restart
    * Restarts the printer, if possible.
    */
   public restart(): void {
-    fetch(`${this.buildConnectionURL()}/printer/restart`, {method: 'POST'});
+    fetch(`${this.buildConnectionURL()}/printer/restart`, { method: 'POST' });
   }
   /**
    * Firware Restart
    * Restarts the printer, if possible, using the FIRMWARE_RESTART command.
    */
   public firmwareRestart(): void {
-    fetch(`${this.buildConnectionURL()}/printer/firmware_restart`, {method: 'POST'});
+    fetch(`${this.buildConnectionURL()}/printer/firmware_restart`, { method: 'POST' });
+  }
+
+  public checkForUpdates(refresh?: boolean | undefined) {
+    return fetch(`${this.buildConnectionURL()}/machine/update / status ? refresh = ${refresh}`, {
+      method: 'POST'
+    })
+      .then((response) => {
+        if (!response.ok) return null;
+        return response.json();
+      })
+      .then((updateStatus: APIResult<MachineUpdateStatusAPIResponse>) => {
+        const versionInfo = updateStatus.result.version_info;
+        // get the keys of the versionInfo object as modules
+        const modules = Object.keys(
+          versionInfo
+        ) as (keyof MachineUpdateStatusAPIResponse['version_info'])[];
+        // Build an array of objects, one object per module
+        const moduleInfo = modules
+          .map((module) => {
+            if (versionInfo[module] !== undefined) {
+              const moduleVersion = versionInfo[module];
+              if (moduleVersion === undefined) return null;
+              if (isUpdateRepositoryStatus(moduleVersion)) {
+                return {
+                  local: moduleVersion.version,
+                  remote: moduleVersion.remote_version,
+                  commits_behind: moduleVersion.commits_behind.length
+                };
+              } else if (isSystemUpdateStatus(moduleVersion)) {
+                return {
+                  packages: moduleVersion.package_list
+                };
+              } else {
+                // Type is Boolean
+                return null;
+              }
+            } else {
+              return null;
+            }
+          })
+          .filter((module) => module !== null);
+        return moduleInfo;
+      })
+      .catch((err) => {
+        return null;
+      }) as unknown as Promise<UpdateCheckResult | null>;
   }
 
   /**
@@ -106,6 +162,6 @@ export default class MoonrakerConnection implements RemotePrinter {
   // fetchStatus();
 
   // public async queryVolume(): Promise<MoonrakerAPIResult.XYZEarray|null> {
-    
+
   // }
 }

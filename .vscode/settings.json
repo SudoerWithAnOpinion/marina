@@ -7,5 +7,9 @@
   "testing.automaticallyOpenPeekView": "never",
   "workbench.tree.indent": 16,
   "explorer.sortOrder": "filesFirst",
-  "explorer.compactFolders": false
+  "explorer.compactFolders": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  }
 }

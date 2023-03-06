@@ -1,12 +1,35 @@
 <script lang='ts'>
-  import type { PageData } from './$types';
+  import { Spinner, Indicator } from 'flowbite-svelte';
   
-  export let data: PageData;
-  console.debug('data', data.update_status.result);
+  import type { PageData } from './$types';
+  export let data: PageData ;
+
+
+
+  $: pageTitle = data.printer !== null ? data.printer.name : 'Printer';
 </script>
+
+<svelte:head>
+  <title>{pageTitle}</title>
+</svelte:head>
 
 <div>
   <div>
-    <strong>Klipper:</strong> {data.update_status.result.version_info.klipper.version} / {data.update_status.result.version_info.klipper.remote_version} 
+    <strong>Printer</strong> {data.printer !== null ? data.printer.name : 'INVALID PRINTER ID'}
+  </div>
+  <div>
+    <strong>Klipper</strong>
+    <div>
+      {#await data.remote.connectionAvailable}
+        <Spinner size={'4'} />
+      {:then connectionAvailable }
+        <Indicator color={connectionAvailable?'green':'red'}/>
+      {/await}
+      {#await data.remote.updatesAvailable}
+        <Spinner size={'4'} />
+      {:then updatesAvailable }
+        {updatesAvailable === null ? 'Updates Check Failed' : 'Updates Check Complete'}
+      {/await}
+    </div>
   </div>
 </div>

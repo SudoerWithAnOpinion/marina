@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { enhance } from '$app/forms';
+  import { enhance, type SubmitFunction } from '$app/forms';
   import {
     Button, 
     ButtonSet,
@@ -17,64 +17,53 @@
     Locked,
     Unlocked,
   } from 'carbon-icons-svelte';
-  import { z } from 'zod';
+  import { newSetupUserSchema } from '$lib/Schemas/NewUser';
 
   import NewUser from '$components/User/NewUser.svelte';
+  let doUserValidate: ()=>boolean;
 
   import type { PageData } from './$types';
   export let data: PageData;
 
   let step: number = 0;
+  if (data.user_count > 0) step = 1;
+  // if (data.printer_count > 0) step = 2;
   $: step;
 
-  const newUserSchema = z.object({
-    username: z.string().min(4, 'Username must be at least 4 characters long'),
-    newPassword: z.string()
-      .min(8, 'Password must be at least 8 characters')
-      .max(64, 'Password must be at most 64 characters long'),
-    confirmPassword: z.string(),
-  });
 
-  const newPrinterSchema = z.object({
-    url: z.string().url(),
-    apiKey: z.optional(z.string()),
-  })
+//   const newPrinterSchema = z.object({
+//     url: z.string().url(),
+//     apiKey: z.optional(z.string()),
+//   })
 
   let newUsername: string;
-  let newUsernameInvalid: boolean = false;
   let newPassword: string;
   let confirmPassword: string;
-  async function checkUser(){
-    const newUser = {
-      username: newUsername,
-      newPassword: newPassword,
-      confirmPassword: confirmPassword,
-    };
-    const result = newUserSchema.parse(newUser); 
-    console.debug(result);
-  }
 
   let newPrinterName: string;
   let newPrinterURL: string;
   let newPrinterApiKeyRequired: boolean = false;
   let newPrinterApiKey: string;
 
-  async function checkPrinter(){
-
-  }
+  let doStepOneSubmit: SubmitFunction = ({form, data, action, cancel})=>{
+    if(doUserValidate()===false) cancel();
+  };
 
 </script>
 
 <Button kind="danger-tertiary" on:click={()=>{step=0}}> Step 0 </Button>
 <Button kind="danger-tertiary" on:click={()=>{step=1}}> Step 1 </Button>
 
-{#if data.user_count > 0}
+<div class='text-3xl'>Initial Setup</div>
+
+{#if data.user_count > 0 && data.printer_count > 0}
   <InlineNotification 
     hideCloseButton
     kind='error'
     title='Error:'
-    subtitle='Users exist in database. Setup has already been completed.'
+    subtitle='Users & printers exist in database. Setup has already been completed.'
   />
+  {console.error('Initial setup page was loaded, but users & printers exist in database.')}
 {:else}
   <InlineNotification 
   hideCloseButton
@@ -87,19 +76,19 @@
     preventChangeOnClick 
     currentIndex={step}
   >
-    <ProgressStep label='Users' />
-    <ProgressStep label='Printers' />
-    <ProgressStep label='Groups' />
+    <ProgressStep label='Users' complete={step > 0} />
+    <ProgressStep label='Printers' complete={step > 1}/>
+    <ProgressStep label='Groups' complete={step > 3}/>
   </ProgressIndicator>
   
   <div class:hidden={step != 0}>
-    <form use:enhance method='POST' action='?first_user'>
-      <NewUser bind:newUsername bind:newPassword bind:confirmPassword />
+    <form use:enhance={doStepOneSubmit} method='POST' action='?/first_user'>
+      <NewUser bind:newUsername bind:newPassword bind:confirmPassword bind:validate={doUserValidate} />
     </form>
   </div>
 
   <div class:hidden={step != 1}>
-    <form use:enhance method='POST' action='?first_printer'>
+    <form use:enhance method='POST' action='?/first_printer'>
       <div class='text-xl'>New Printer</div>
       <TextInput 
         labelText='Printer Address' 

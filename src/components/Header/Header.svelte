@@ -1,4 +1,8 @@
 <script lang='ts'>
+  import type Printer from '$models/Printers/Printer';
+  import type UserModel from '$models/Users/User';
+
+  import { base } from '$app/paths';
   import { env } from '$env/dynamic/public';
   import { goto } from '$app/navigation';
   import { 
@@ -29,10 +33,13 @@
     User, 
     UserAvatarFilledAlt, 
   } from 'carbon-icons-svelte';
-  import type Printer from '$models/Printers/Printer';
-  import type UserModel from '$models/Users/User';
+  
+  import { getUser } from '@lucia-auth/sveltekit/client';
+  const user = getUser();
+
+
   const genLink = (path: string): string => {
-    return ((env.PUBLIC_BASE_PATH ?? '') + path).replace('//', '/');
+    return (base + path).replace('//', '/');
   }
   const appTransition = { duration: 600, delay: 50, easing: expoIn };
 
@@ -41,7 +48,7 @@
 
   export const printers: Printer[] = [];
   export let printerName = 'Global';
-  export let user: UserModel | null = null;
+//   export let user: UserModel | null = null;
   $: user;
   
 </script>
@@ -51,20 +58,15 @@
     <SkipToContent />
   </svelte:fragment>
   <HeaderNav>
-    <HeaderNavItem href={genLink('/printers')} text="Printers" />
-    <HeaderNavItem href={genLink('/jobs')} text="Jobs" />
-    <HeaderNavItem href={genLink('/users')} text="Users" />
-    <!-- <HeaderNavMenu text="Menu">
-      <HeaderNavItem href="/" text="Link 1" />
-      <HeaderNavItem href="/" text="Link 2" />
-      <HeaderNavItem href="/" text="Link 3" />
-    </HeaderNavMenu> -->
-    <!-- <HeaderNavItem href="#" text="Login" on:click={openSideNav()} /> -->
-    <!-- <HeaderNavItem></HeaderNavItem> -->
+    {#if $user !== null}
+        <HeaderNavItem href={genLink('/printers')} text="Printers" />
+        <HeaderNavItem href={genLink('/jobs')} text="Jobs" />
+        <HeaderNavItem href={genLink('/users')} text="Users" />
+    {/if}
   </HeaderNav>
 
   <HeaderUtilities>
-    {#if user !== null}
+    {#if $user !== null}
       <HeaderAction aria-label="User" 
         icon={UserAvatarFilledAlt}
         closeIcon={UserAvatarFilledAlt}
@@ -74,10 +76,7 @@
           <HeaderPanelLink>Logout</HeaderPanelLink>
         </HeaderPanelLinks>
       </HeaderAction>
-    {:else}
-      <HeaderGlobalAction aria-label="Login" icon={Login} on:click={()=>{goto(genLink('/auth/login'))}} />
-    {/if}
-    <HeaderAction transition={appTransition}>
+      <HeaderAction transition={appTransition}>
       <HeaderPanelLinks>
         <HeaderPanelDivider>Printers</HeaderPanelDivider>
         {#each printers as printer}
@@ -90,6 +89,10 @@
 
       </HeaderPanelLinks>
     </HeaderAction>
+    {:else}
+      <HeaderGlobalAction aria-label="Login" icon={Login} on:click={()=>{goto(genLink('/auth/login'))}} />
+    {/if}
+    
   </HeaderUtilities>
 
 </Header>
