@@ -21,7 +21,7 @@ export default class Key extends Model<InferAttributes<Key>, InferCreationAttrib
   declare hashed_password: string | null;
 
   declare primary: boolean;
-
+  declare expires: number | null;
   // Associations
   declare user_id: ForeignKey<User['id']>;
   declare user?: NonAttribute<User>;
@@ -45,11 +45,15 @@ export default class Key extends Model<InferAttributes<Key>, InferCreationAttrib
           allowNull: false,
           defaultValue: false
         },
-        user_id: {
+        expires: {
           type: DataTypes.INTEGER,
+          allowNull: true
+        },
+        user_id: {
+          type: DataTypes.STRING,
           references: {
             model: User,
-            key: 'userId'
+            key: 'id'
           },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE'

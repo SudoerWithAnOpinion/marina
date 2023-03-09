@@ -47,11 +47,11 @@ export default class Session extends Model<
           allowNull: false
         },
         user_id: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING,
           allowNull: false,
           references: {
             model: User,
-            key: 'userId'
+            key: 'id'
           },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE'

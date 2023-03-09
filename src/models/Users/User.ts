@@ -41,7 +41,7 @@ export default class User extends Model<InferAttributes<User>, InferCreationAttr
         },
         username: {
           type: DataTypes.STRING,
-          allowNull: false,
+          allowNull: true,
           unique: true
         },
         role: {

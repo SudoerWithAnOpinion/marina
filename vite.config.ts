@@ -3,9 +3,14 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import type { UserConfig } from 'vite';
 import { optimizeCss } from 'carbon-preprocess-svelte';
+import { nodeLoaderPlugin } from '@vavite/node-loader/plugin';
 
 const config: UserConfig = {
-  plugins: [sveltekit(), process.env.NODE_ENV === 'production' && optimizeCss()],
+  plugins: [
+    sveltekit(),
+    nodeLoaderPlugin(),
+    process.env.NODE_ENV === 'production' && optimizeCss()
+  ],
   server: {
     host: true,
     strictPort: true,

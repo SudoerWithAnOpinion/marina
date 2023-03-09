@@ -13,6 +13,10 @@ const config = {
     serviceWorker: {
       register: false
     },
+    csrf: {
+      // checkOrigin: process.env.NODE_ENV==='development'?false:true
+      checkOrigin: false
+    },
     paths: {
       base: process.env.PUBLIC_BASE_PATH || ''
     },

@@ -11,8 +11,12 @@ module.exports = {
         },
         username: {
           type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: true,
           unique: true
+        },
+        role: {
+          type: Sequelize.TEXT,
+          allowNull: true,
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -42,13 +46,17 @@ module.exports = {
               defaultValue: false
             },
             user_id: {
-              type: Sequelize.INTEGER,
+              type: Sequelize.STRING,
               references: {
                 model: { tableName: 'users' },
-                key: 'userId'
+                key: 'id'
               },
               onUpdate: 'CASCADE',
               onDelete: 'CASCADE'
+            },
+            expires: {
+              type: Sequelize.INTEGER,
+              allowNull: true
             }
           }),
           queryInterface.createTable('session', {
@@ -65,11 +73,11 @@ module.exports = {
               allowNull: false
             },
             user_id: {
-              type: Sequelize.INTEGER,
+              type: Sequelize.STRING,
               allowNull: false,
               references: {
                 model: { tableName: 'users' },
-                key: 'userId'
+                key: 'id'
               },
               onUpdate: 'CASCADE',
               onDelete: 'CASCADE'
