@@ -63,8 +63,8 @@ export default class Key extends Model<InferAttributes<Key>, InferCreationAttrib
         sequelize,
         modelName: 'Key',
         tableName: 'keys',
-        createdAt: 'created_at',
-        updatedAt: 'updated_at'
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt'
       }
     );
   }

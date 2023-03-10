@@ -76,36 +76,31 @@ const userAdapter: UserAdapter = {
         return modelKeys.includes(entry[0]) && !['id', 'createdAt', 'updatedAt'].includes(entry[0]); // TODO!: key in User does not work
       })
     ) as Omit<Attributes<User>, 'id'>;
-    const transaction = await sequelize.transaction({ type: Transaction.TYPES.IMMEDIATE });
-    try {
-      const user = await User.create(
-        {
-          id: userId,
-          ...validAttributes
-        },
-        { transaction }
-      );
-      if (key !== null) {
-        Key.create(
+    return await sequelize
+      .transaction({ type: Transaction.TYPES.IMMEDIATE }, async (transaction) => {
+        const user = await User.create(
           {
-            ...key
+            id: userId,
+            ...validAttributes
           },
           { transaction }
         );
-      }
-      if (user !== null) {
-        await transaction.commit();
-      } else {
-        await transaction.rollback();
-      }
-      return user;
-    } catch (err: any) {
-      transaction.rollback();
-      if (err.name == 'SequelizeUniqueConstraintError') {
-        throw new LuciaError('AUTH_DUPLICATE_KEY_ID');
-      }
-      throw new LuciaError('UNKNOWN_ERROR');
-    }
+        if (key !== null) {
+          await Key.create(
+            {
+              ...key
+            },
+            { transaction }
+          );
+        }
+        return user;
+      })
+      .catch((err) => {
+        if (err.name == 'SequelizeUniqueConstraintError')
+          throw new LuciaError('AUTH_DUPLICATE_KEY_ID');
+        console.error(err);
+        throw new Error('UNKNOWN_ERROR');
+      });
   },
   updateKeyPassword: async (key: string, hashedPassword: string | null): Promise<void> => {
     return Key.update(

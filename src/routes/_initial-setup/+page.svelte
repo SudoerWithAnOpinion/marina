@@ -3,8 +3,7 @@
   import {
     Button, 
     ButtonSet,
-    TextInput, 
-    PasswordInput,
+    Loading,
     ProgressIndicator,
     ProgressStep,
     InlineNotification,
@@ -17,14 +16,17 @@
     Locked,
     Unlocked,
   } from 'carbon-icons-svelte';
-  import { newSetupUserSchema } from '$lib/Schemas/NewUser';
-
+  import type { PageData, ActionData } from './$types';
   import NewUser from '$components/User/NewUser.svelte';
+  import NewPrinter from '$components/Printer/NewPrinter.svelte';
+
   let doUserValidate: ()=>boolean;
 
-  import type { PageData } from './$types';
   export let data: PageData;
+  export let form: ActionData;
+  $: loading = false;
 
+  $: console.log(form);
   let step: number = 0;
   if (data.user_count > 0) step = 1;
   // if (data.printer_count > 0) step = 2;
@@ -41,15 +43,31 @@
   let confirmPassword: string;
 
   let newPrinterName: string;
+  let newPrinterDescription: string;
   let newPrinterURL: string;
+  let newPrinterConnectionType: 'none' | 'moonraker' | 'octoprint';
   let newPrinterApiKeyRequired: boolean = false;
   let newPrinterApiKey: string;
 
   let doStepOneSubmit: SubmitFunction = ({form, data, action, cancel})=>{
-    if(doUserValidate()===false) cancel();
+    loading = true;
+    console.debug('[Step 0/User]: Submit New User');
+    if(doUserValidate()===false) {
+      console.debug('[Step 0/User]: User validation failed, submission aborted');
+      cancel();
+    }
+    console.debug('[Step 0/User]: User validated');
+
+    return async ({result, update})=>{
+      loading = false;
+      step++;
+      await update();
+    }
+
   };
 
 </script>
+<Loading active={loading} />
 
 <Button kind="danger-tertiary" on:click={()=>{step=0}}> Step 0 </Button>
 <Button kind="danger-tertiary" on:click={()=>{step=1}}> Step 1 </Button>
@@ -89,28 +107,22 @@
 
   <div class:hidden={step != 1}>
     <form use:enhance method='POST' action='?/first_printer'>
-      <div class='text-xl'>New Printer</div>
-      <TextInput 
-        labelText='Printer Address' 
-        helperText="Enter your printer's access URL with protocol, ex: http://mainsail.local"
-        name='printer_url' 
-        autocomplete='off'
-      />
-      <Toggle bind:toggled={newPrinterApiKeyRequired} labelText='Use API Key'>
-        <span slot='labelA'><Unlocked class='inline' /> No API Key</span>
-        <span slot='labelB'><Locked class='inline' /> Requires API Key</span>
-      </Toggle>
-      <PasswordInput 
-        labelText='API Key' 
-        name='api_key' 
-        autocomplete='off'
-        disabled={!newPrinterApiKeyRequired}
-      />
-      <ButtonSet>
-        <Button type='submit' size='field' kind='secondary' icon={NextOutline}>Skip for Now</Button>
-        <Button type='submit' size='field' kind='primary' icon={AddFilled}>Create Printer</Button>
-      </ButtonSet>
+      <NewPrinter 
+        bind:name={newPrinterName} 
+        bind:description={newPrinterDescription}
+        bind:url={newPrinterURL} 
+        bind:connectionType={newPrinterConnectionType}
+        bind:apiKeyRequired={newPrinterApiKeyRequired}
+        bind:apiKey={newPrinterApiKey} />
     </form>
   </div>
 
+{/if}
+{#if form}
+  <div>
+    <div>{form.severity}</div>
+    <div>{form.body}</div>
+    <div>{form.status}</div>
+    <div>{form.message}</div>
+  </div>
 {/if}

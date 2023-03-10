@@ -5,6 +5,9 @@
     PasswordInput,
   } from 'carbon-components-svelte';
   import { 
+    CheckmarkFilled,
+    Connect,
+    ErrorFilled,
     UserFollow,
   } from 'carbon-icons-svelte';
   
@@ -82,6 +85,7 @@
 </script>
 
 <div class='text-xl'>New User</div>
+<div class='mb-8' />
 <TextInput 
   labelText='Username' 
   helperText='Choose a name to login with. Spaces and special characters are not permitted.'

@@ -61,8 +61,8 @@ export default class Session extends Model<
         sequelize,
         modelName: 'Session',
         tableName: 'sessions',
-        createdAt: 'created_at',
-        updatedAt: 'updated_at'
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt'
       }
     );
   }

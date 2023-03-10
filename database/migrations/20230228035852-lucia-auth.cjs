@@ -57,9 +57,19 @@ module.exports = {
             expires: {
               type: Sequelize.INTEGER,
               allowNull: true
+            },
+            createdAt: {
+              type: Sequelize.DATE,
+              allowNull: false,
+              defaultValue: Sequelize.NOW
+            },
+            updatedAt: {
+              type: Sequelize.DATE,
+              allowNull: false,
+              defaultValue: Sequelize.NOW
             }
           }),
-          queryInterface.createTable('session', {
+          queryInterface.createTable('sessions', {
             id: {
               type: Sequelize.STRING,
               primaryKey: true
@@ -81,6 +91,16 @@ module.exports = {
               },
               onUpdate: 'CASCADE',
               onDelete: 'CASCADE'
+            },
+            createdAt: {
+              type: Sequelize.DATE,
+              allowNull: false,
+              defaultValue: Sequelize.NOW
+            },
+            updatedAt: {
+              type: Sequelize.DATE,
+              allowNull: false,
+              defaultValue: Sequelize.NOW
             }
           })
         ]);

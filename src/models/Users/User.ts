@@ -48,7 +48,7 @@ export default class User extends Model<InferAttributes<User>, InferCreationAttr
           type: DataTypes.STRING,
           allowNull: true,
           set: (input: string) => {
-            if (input in ['ADMINISTRATOR', 'USER', 'SERVICE_ACCOUNT', null]) {
+            if (['ADMINISTRATOR', 'USER', 'SERVICE_ACCOUNT', null].includes(input)) {
               return input;
             } else {
               throw new Error(
