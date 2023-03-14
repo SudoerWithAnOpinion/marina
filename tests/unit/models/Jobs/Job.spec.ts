@@ -21,7 +21,10 @@ describe('Job', () => {
   describe('associations', () => {
     it('should be associated with JobEvent', () => {
       Job.associate();
-      expectTypeOf(Job).toHaveProperty('associations').toHaveProperty('events').toEqualTypeOf<Association<Job, JobEvent>>();
+      expectTypeOf(Job)
+        .toHaveProperty('associations')
+        .toHaveProperty('events')
+        .toEqualTypeOf<Association<Job, JobEvent>>();
       expect(Job.hasMany).toBeCalledWith(JobEvent, {
         foreignKey: 'jobId',
         sourceKey: 'jobId',

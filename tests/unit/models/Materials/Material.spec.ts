@@ -20,13 +20,16 @@ describe('Material', () => {
   describe('associations', () => {
     it('should be associated with MaterialUsage', () => {
       Material.associate();
-      expectTypeOf(Material).toHaveProperty('associations').toHaveProperty('materialUsage').toEqualTypeOf<Association<Material, MaterialUsage>>();
+      expectTypeOf(Material)
+        .toHaveProperty('associations')
+        .toHaveProperty('materialUsage')
+        .toEqualTypeOf<Association<Material, MaterialUsage>>();
       expect(Material.hasMany).toBeCalledWith(MaterialUsage, {
         sourceKey: 'materialId',
         foreignKey: 'materialId',
         as: 'materialUsage',
         onDelete: 'RESTRICT',
-        onUpdate: 'CASCADE',
+        onUpdate: 'CASCADE'
       });
     });
   });
@@ -59,11 +62,13 @@ describe('Material', () => {
       materialWeight: 1000,
       color: 'ffffff',
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     });
     it('should correctly return "state"', () => {
       expectTypeOf(material).toHaveProperty('state').toBeString();
-      expect(material.openedAt).toSatisfy((openedAt) => { return (openedAt ?? null) === null })
+      expect(material.openedAt).toSatisfy((openedAt) => {
+        return (openedAt ?? null) === null;
+      });
       // Open & Depleted IS NULL
       material.openedAt = null;
       material.depletedAt = null;
@@ -90,5 +95,4 @@ describe('Material', () => {
       it.todo('should only allow valid 6 digit HEX color codes');
     });
   });
-
 });

@@ -47,12 +47,12 @@ export default class Printer extends Model<
   /**
    * The API key for the printer's Moonraker API
    */
-  declare apiKey: string;
+  declare apiKey: string | null;
 
   /**
    * Print Volume
    */
-  declare volume: string;
+  declare volume: string | null;
 
   // Associations
   declare jobs?: NonAttribute<Job[]>;
@@ -61,8 +61,8 @@ export default class Printer extends Model<
   };
 
   // Timestamps
-  declare createdAt: Date;
-  declare updatedAt: Date;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
   public static initialize(sequelize: Sequelize) {
     return this.init(
@@ -95,7 +95,7 @@ export default class Printer extends Model<
         },
         volume: {
           type: DataTypes.JSON,
-          allowNull: false
+          allowNull: true
         },
         createdAt: {
           type: DataTypes.DATE,
@@ -136,7 +136,7 @@ export default class Printer extends Model<
     this.remoteConnection = RemotePrinterFactory.createPrinter(
       this.connectionType,
       this.address,
-      this.apiKey
+      this.apiKey !== null ? this.apiKey : undefined
     );
     return this.remoteConnection;
   }

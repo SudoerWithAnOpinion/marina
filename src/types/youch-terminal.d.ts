@@ -1,1 +1,1 @@
-declare module 'youch-terminal'
+declare module 'youch-terminal';

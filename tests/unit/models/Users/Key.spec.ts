@@ -21,7 +21,10 @@ describe('Key', () => {
   describe('associations', () => {
     it('should be associated with User', () => {
       Key.associate();
-      expectTypeOf(Key).toHaveProperty('associations').toHaveProperty('user').toEqualTypeOf<Association<Key, User>>();
+      expectTypeOf(Key)
+        .toHaveProperty('associations')
+        .toHaveProperty('user')
+        .toEqualTypeOf<Association<Key, User>>();
       expect(Key.belongsTo).toBeCalledWith(User, {
         foreignKey: 'user_id',
         targetKey: 'id',

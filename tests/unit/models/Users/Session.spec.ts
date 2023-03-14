@@ -21,7 +21,10 @@ describe('Session', () => {
   describe('associations', () => {
     it('should be associated with User', () => {
       Session.associate();
-      expectTypeOf(Session).toHaveProperty('associations').toHaveProperty('user').toEqualTypeOf<Association<Session, User>>();
+      expectTypeOf(Session)
+        .toHaveProperty('associations')
+        .toHaveProperty('user')
+        .toEqualTypeOf<Association<Session, User>>();
       expect(Session.belongsTo).toBeCalledWith(User, {
         foreignKey: 'user_id',
         targetKey: 'id',

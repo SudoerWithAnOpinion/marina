@@ -1,10 +1,10 @@
-<script lang='ts'>
+<script lang="ts">
   import { Card } from 'flowbite-svelte';
 
   export let printer: any; // Printer;
 
   let stateClass = '';
-  switch (printer.state){
+  switch (printer.state) {
     case 'idle':
       stateClass = 'bg-slate-300';
       break;
@@ -24,22 +24,22 @@
       stateClass = 'bg-green-600';
       break;
   }
-
 </script>
 
-<Card color='none' class={stateClass}>
-  <h5 class='mb-2 text-2xl font-bold tracing-tight'>{printer.name}</h5>
-  <div class=''>(Camera Feed or Print Thumbnail)</div>
+<Card color="none" class={stateClass}>
+  <h5 class="tracing-tight mb-2 text-2xl font-bold">{printer.name}</h5>
+  <div class="">(Camera Feed or Print Thumbnail)</div>
   <!-- Footer -->
-  <div class='grid grid-cols-2 gap-1'>
+  <div class="grid grid-cols-2 gap-1">
     {#each printer.heaters as heater}
-    <div>
-      <div class='text-bold'>{heater.name}</div>
       <div>
-        <span>{heater.currentTemp}</span><span class='text-sm'>°</span>
-        / 
-        <span>{heater.targetTemp}</span><span class='text-sm'>°</span>
+        <div class="text-bold">{heater.name}</div>
+        <div>
+          <span>{heater.currentTemp}</span><span class="text-sm">°</span>
+          /
+          <span>{heater.targetTemp}</span><span class="text-sm">°</span>
+        </div>
       </div>
-    </div>
     {/each}
-</Card>
+  </div></Card
+>

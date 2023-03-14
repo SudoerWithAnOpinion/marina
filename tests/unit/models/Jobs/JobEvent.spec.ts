@@ -15,8 +15,8 @@ describe('JobEvent', () => {
   });
 
   it('should have static properties', () => {
-    expectTypeOf(JobEvent).toHaveProperty('associations').toHaveProperty('job')
-    expectTypeOf(JobEvent).toHaveProperty('associations').toHaveProperty('printer')
+    expectTypeOf(JobEvent).toHaveProperty('associations').toHaveProperty('job');
+    expectTypeOf(JobEvent).toHaveProperty('associations').toHaveProperty('printer');
   });
   it('should have static methods', () => {
     expectTypeOf(JobEvent).toHaveProperty('initialize').toBeFunction();
@@ -27,20 +27,27 @@ describe('JobEvent', () => {
     expectTypeOf(jobEvent).toHaveProperty('eventId').toBeString();
     expectTypeOf(jobEvent).toHaveProperty('jobId').toEqualTypeOf<ForeignKey<Job['jobId']>>();
     expectTypeOf(jobEvent).toHaveProperty('job').toBeNullable();
-    expectTypeOf(jobEvent).toHaveProperty('printerId').toEqualTypeOf<ForeignKey<Printer['printerId']> | null>();
+    expectTypeOf(jobEvent)
+      .toHaveProperty('printerId')
+      .toEqualTypeOf<ForeignKey<Printer['printerId']> | null>();
     expectTypeOf(jobEvent).toHaveProperty('printer').toBeNullable();
-
   });
   describe('associations', () => {
     it('should be associated with Job', () => {
       JobEvent.associate();
-      expectTypeOf(JobEvent).toHaveProperty('associations').toHaveProperty('job').toEqualTypeOf<Association<JobEvent, Job>>();
+      expectTypeOf(JobEvent)
+        .toHaveProperty('associations')
+        .toHaveProperty('job')
+        .toEqualTypeOf<Association<JobEvent, Job>>();
       expect(JobEvent.belongsTo).toBeCalledWith(Job, {
         foreignKey: 'jobId',
         targetKey: 'jobId',
         as: 'job'
       });
-      expectTypeOf(JobEvent).toHaveProperty('associations').toHaveProperty('printer').toEqualTypeOf<Association<JobEvent, Printer>>();
+      expectTypeOf(JobEvent)
+        .toHaveProperty('associations')
+        .toHaveProperty('printer')
+        .toEqualTypeOf<Association<JobEvent, Printer>>();
       expect(JobEvent.hasOne).toBeCalledWith(Printer, {
         foreignKey: 'printerId',
         sourceKey: 'printerId',

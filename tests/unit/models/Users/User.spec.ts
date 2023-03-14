@@ -22,7 +22,10 @@ describe('User', () => {
   describe('associations', () => {
     it('should be associated with Key', () => {
       User.associate();
-      expectTypeOf(User).toHaveProperty('associations').toHaveProperty('keys').toEqualTypeOf<Association<User, Key>>();
+      expectTypeOf(User)
+        .toHaveProperty('associations')
+        .toHaveProperty('keys')
+        .toEqualTypeOf<Association<User, Key>>();
       expect(User.hasMany).toBeCalledWith(Key, {
         foreignKey: 'user_id',
         sourceKey: 'id',
@@ -33,7 +36,10 @@ describe('User', () => {
     });
     it('should be associated with Session', () => {
       User.associate();
-      expectTypeOf(User).toHaveProperty('associations').toHaveProperty('sessions').toEqualTypeOf<Association<User, Session>>();
+      expectTypeOf(User)
+        .toHaveProperty('associations')
+        .toHaveProperty('sessions')
+        .toEqualTypeOf<Association<User, Session>>();
       expect(User.hasMany).toBeCalledWith(Session, {
         foreignKey: 'user_id',
         sourceKey: 'id',

@@ -13,7 +13,7 @@ describe('Printer', () => {
   it('should have static properties', () => {
     expectTypeOf(Printer).toHaveProperty('initialize').toBeFunction();
     expectTypeOf(Printer).toHaveProperty('associate').toBeFunction();
-    expectTypeOf(Printer).toHaveProperty('associations').toHaveProperty('jobs')
+    expectTypeOf(Printer).toHaveProperty('associations').toHaveProperty('jobs');
   });
   it('should have static methods', () => {
     expectTypeOf(Printer).toHaveProperty('initialize').toBeFunction();

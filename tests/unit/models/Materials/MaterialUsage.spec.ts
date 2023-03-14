@@ -21,7 +21,10 @@ describe('Material', () => {
   describe('associations', () => {
     it('should be associated with Material', () => {
       MaterialUsage.associate();
-      expectTypeOf(MaterialUsage).toHaveProperty('associations').toHaveProperty('material').toEqualTypeOf<Association<MaterialUsage, Material>>();
+      expectTypeOf(MaterialUsage)
+        .toHaveProperty('associations')
+        .toHaveProperty('material')
+        .toEqualTypeOf<Association<MaterialUsage, Material>>();
       expect(MaterialUsage.belongsTo).toBeCalledWith(Material, {
         foreignKey: 'materialId',
         targetKey: 'materialId',
@@ -33,8 +36,12 @@ describe('Material', () => {
   });
   it('should have instance properties', () => {
     const materialUsage = new MaterialUsage();
-    expectTypeOf(materialUsage).toHaveProperty('materialUsageId').toEqualTypeOf<CreationOptional<number>>();
-    expectTypeOf(materialUsage).toHaveProperty('materialId').toEqualTypeOf<ForeignKey<Material['materialId']>>();
+    expectTypeOf(materialUsage)
+      .toHaveProperty('materialUsageId')
+      .toEqualTypeOf<CreationOptional<number>>();
+    expectTypeOf(materialUsage)
+      .toHaveProperty('materialId')
+      .toEqualTypeOf<ForeignKey<Material['materialId']>>();
     expectTypeOf(materialUsage).toHaveProperty('weightUsed').toEqualTypeOf<number>();
   });
 

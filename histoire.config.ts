@@ -1,5 +1,5 @@
-import { defineConfig } from 'histoire'
-import { HstSvelte } from '@histoire/plugin-svelte'
+import { defineConfig } from 'histoire';
+import { HstSvelte } from '@histoire/plugin-svelte';
 
 export default defineConfig({
   setupFile: '/src/histoire.setup.ts',
@@ -11,9 +11,7 @@ export default defineConfig({
       dark: './static/favicon.png'
     },
     logoHref: '/',
-    favicon: './static/favicon.png',
+    favicon: './static/favicon.png'
   },
-  plugins: [
-    HstSvelte(),
-  ],
-})
+  plugins: [HstSvelte()]
+});

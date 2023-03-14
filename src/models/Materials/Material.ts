@@ -35,7 +35,7 @@ export default class Material extends Model<
    */
   declare materialType: string;
 
-  /** 
+  /**
    * Diameter of the material in milimeters
    * @default 1.75
    */
@@ -49,7 +49,7 @@ export default class Material extends Model<
   /**
    * The material weight (in grams) of the spool
    */
-  declare materialWeight: number
+  declare materialWeight: number;
 
   /**
    * The material color, stored as a hexademical string
@@ -82,84 +82,88 @@ export default class Material extends Model<
   /**
    * Indicates the state of the spool.
    */
-  get state(): NonAttribute<string> { // TODO: WIP, does this work?
-    const isOpen = ((this.openedAt ?? null) !== null);
-    const isDepleted = ((this.depletedAt ?? null) !== null);
+  get state(): NonAttribute<string> {
+    // TODO: WIP, does this work?
+    const isOpen = (this.openedAt ?? null) !== null;
+    const isDepleted = (this.depletedAt ?? null) !== null;
 
     if (!isOpen) return 'NEW';
     if (isOpen && !isDepleted) return 'IN_USE';
     return 'DEPLETED';
   }
   public static initialize(sequelize: Sequelize) {
-    return this.init({
-      materialId: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
-      },
-      vendor: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      materialType: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      materialDiameter: {
-        type: DataTypes.NUMBER,
-        allowNull: false
-      },
-      initialWeight: {
-        type: DataTypes.NUMBER,
-        allowNull: true
-      },
-      materialWeight: {
-        type: DataTypes.NUMBER,
-        allowNull: false
-      },
-      color: {
-        type: DataTypes.STRING(6),
-        set: (input: string) => {
-          const regex = /^[0-9a-f]{6}$/i;
-          if (regex.test(input)) {
-            return input.toLowerCase();
-          } else {
-            throw new Error('Invalid color format: Use a hexadecimal string (e.g. "00aaff")');
+    return this.init(
+      {
+        materialId: {
+          type: DataTypes.UUID,
+          primaryKey: true,
+          defaultValue: DataTypes.UUIDV4
+        },
+        vendor: {
+          type: DataTypes.STRING,
+          allowNull: false
+        },
+        materialType: {
+          type: DataTypes.STRING,
+          allowNull: false
+        },
+        materialDiameter: {
+          type: DataTypes.NUMBER,
+          allowNull: false
+        },
+        initialWeight: {
+          type: DataTypes.NUMBER,
+          allowNull: true
+        },
+        materialWeight: {
+          type: DataTypes.NUMBER,
+          allowNull: false
+        },
+        color: {
+          type: DataTypes.STRING(6),
+          set: (input: string) => {
+            const regex = /^[0-9a-f]{6}$/i;
+            if (regex.test(input)) {
+              return input.toLowerCase();
+            } else {
+              throw new Error('Invalid color format: Use a hexadecimal string (e.g. "00aaff")');
+            }
+          },
+          validate: {
+            is: /^[0-9a-f]{6}$/i
           }
         },
-        validate: {
-          is: /^[0-9a-f]{6}$/i
+        openedAt: {
+          type: DataTypes.DATE,
+          allowNull: true
+        },
+        depletedAt: {
+          type: DataTypes.DATE,
+          allowNull: true
+        },
+        lastRenewalAt: {
+          type: DataTypes.DATE,
+          allowNull: true
+        },
+        createdAt: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updatedAt: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
         }
       },
-      openedAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-      depletedAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-      lastRenewalAt: {
-        type: DataTypes.DATE,
-        allowNull: true
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
+      {
+        sequelize,
+        tableName: 'materials',
+        modelName: 'Material',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt'
       }
-    }, {
-      sequelize,
-      tableName: 'materials',
-      modelName: 'Material',
-      createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    });
+    );
   }
 
   // Associations
