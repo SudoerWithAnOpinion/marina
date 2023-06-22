@@ -55,6 +55,6 @@
 	"dependencies": {
 		"sequelize": "^6.28.0",
 		"sqlite3": "^5.1.4",
-		"xml2js": "^0.4.23"
+		"xml2js": "^0.6.0"
 	}
 }
